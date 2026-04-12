@@ -1941,17 +1941,11 @@
           <option value="Kraken">Kraken</option>
         </select>
 
-        <select class="filter-select" id="filterWeight" onchange="applyFilters()">
-          <option value="">Todos los pesos</option>
-          <option value="1">Peso &gt; 1%</option>
-          <option value="3">Peso &gt; 3%</option>
-          <option value="5">Peso &gt; 5%</option>
-          <option value="10">Peso &gt; 10%</option>
-        </select>
-
         <select class="filter-select" id="sortSelect" onchange="applyFilters()">
           <option value="value_desc">Valor ↓</option>
           <option value="value_asc">Valor ↑</option>
+          <option value="weight_desc">Peso ↓</option>
+          <option value="weight_asc">Peso ↑</option>
           <option value="pnl_desc">Resultado % ↓</option>
           <option value="pnl_asc">Resultado % ↑</option>
           <option value="name_asc">Nombre</option>
@@ -2575,7 +2569,7 @@
     let currency    = 'EUR';
     let sortField   = 'type';
     let sortAsc     = true;
-    let filterState = { search: '', type: '', broker: '', minWeight: 0 };
+    let filterState = { search: '', type: '', broker: '' };
 
     function loadPositions() {
       try {
@@ -2878,7 +2872,6 @@
        ========================================================= */
     function getFilteredPositions() {
       const search = filterState.search.toLowerCase();
-      const total  = getTotalValue();
       return positions
         .filter(p => {
           const matchSearch = !search ||
@@ -2886,9 +2879,7 @@
             p.name.toLowerCase().includes(search);
           const matchType   = !filterState.type   || p.type   === filterState.type;
           const matchBroker = !filterState.broker || p.broker === filterState.broker;
-          const weight      = total > 0 ? (p.value / total) * 100 : 0;
-          const matchWeight = !filterState.minWeight || weight >= filterState.minWeight;
-          return matchSearch && matchType && matchBroker && matchWeight;
+          return matchSearch && matchType && matchBroker;
         })
         .sort((a, b) => {
           // Orden por tipo: ETF → Acción → Crypto
@@ -3022,18 +3013,19 @@
        FILTROS Y ORDENACIÓN
        ========================================================= */
     function applyFilters() {
-      filterState.search    = document.getElementById('searchInput').value;
-      filterState.type      = document.getElementById('filterType').value;
-      filterState.broker    = document.getElementById('filterBroker').value;
-      filterState.minWeight = parseFloat(document.getElementById('filterWeight').value) || 0;
+      filterState.search = document.getElementById('searchInput').value;
+      filterState.type   = document.getElementById('filterType').value;
+      filterState.broker = document.getElementById('filterBroker').value;
 
       const sortVal = document.getElementById('sortSelect').value;
       const sortMap = {
-        'value_desc': { f: 'value', asc: false },
-        'value_asc':  { f: 'value', asc: true  },
-        'pnl_desc':   { f: 'pnl_pct', asc: false },
-        'pnl_asc':    { f: 'pnl_pct', asc: true  },
-        'name_asc':   { f: 'name', asc: true     },
+        'value_desc':  { f: 'value',   asc: false },
+        'value_asc':   { f: 'value',   asc: true  },
+        'weight_desc': { f: 'value',   asc: false },
+        'weight_asc':  { f: 'value',   asc: true  },
+        'pnl_desc':    { f: 'pnl_pct', asc: false },
+        'pnl_asc':     { f: 'pnl_pct', asc: true  },
+        'name_asc':    { f: 'name',    asc: true   },
       };
       if (sortMap[sortVal]) {
         sortField = sortMap[sortVal].f;
