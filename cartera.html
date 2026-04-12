@@ -1678,6 +1678,133 @@
     /* =========================================================
        RESPONSIVE
        ========================================================= */
+    /* =========================================================
+       RADAR CARDS
+       ========================================================= */
+    .radar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      animation: fadeInUp 0.3s ease both;
+    }
+
+    .radar-card:hover {
+      border-color: var(--accent-blue);
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .radar-card-top {
+      padding: 16px 16px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .radar-rank {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 8px;
+      flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.04em;
+    }
+
+    .radar-info { flex: 1; min-width: 0; }
+
+    .radar-company {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .radar-ticker-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      letter-spacing: 0.03em;
+    }
+
+    /* Destacado */
+    .radar-card-destaque {
+      border-color: var(--accent-amber);
+      box-shadow: 0 0 0 1px var(--accent-amber-dim), var(--shadow-card);
+    }
+
+    .radar-card-destaque:hover {
+      border-color: var(--accent-amber);
+      box-shadow: 0 0 20px rgba(251,191,36,0.15), var(--shadow-hover);
+    }
+
+    .radar-rank-destaque {
+      background: var(--accent-amber-dim);
+      color: var(--accent-amber);
+      border-color: var(--accent-amber);
+    }
+
+    /* Section label */
+    .radar-section-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
+    }
+
+    /* Radar monthly prices */
+    .radar-perf {
+      display: flex;
+      gap: 0;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .radar-month {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+      padding-right: 8px;
+    }
+    .radar-month:not(:first-child) {
+      padding-left: 8px;
+      border-left: 1px solid var(--border);
+    }
+    .radar-month-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+    .radar-month-price {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+    .radar-pos { color: var(--accent-green) !important; }
+    .radar-neg { color: #f87171 !important; }
+
+    .radar-widget {
+      height: 200px;
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+    }
+
     @media (max-width: 1100px) {
       .hero-grid { grid-template-columns: repeat(3, 1fr); }
     }
@@ -1875,46 +2002,34 @@
     <div class="main-container">
 
       <!-- Header -->
-      <div style="margin-bottom:16px; display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+      <div style="margin-bottom:24px; display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:12px;">
         <div>
-          <div style="font-size:24px; font-weight:700; color:var(--text-primary); margin-bottom:4px;">Lista de seguimiento</div>
-          <div style="font-size:14px; color:var(--text-muted);">46 símbolos · Precios en tiempo real vía TradingView</div>
+          <div style="font-size:24px; font-weight:700; color:var(--text-primary); margin-bottom:4px;">Mi Radar</div>
+          <div style="font-size:14px; color:var(--text-muted);">11 activos · Ordenados por interés personal · Precios en vivo</div>
         </div>
         <div style="font-size:12px; color:var(--accent-green); background:var(--accent-green-dim); border:1px solid var(--accent-green); border-radius:8px; padding:6px 12px;">
-          🟢 Precios en vivo — haz clic en cualquier fila para ver el gráfico
+          🟢 En vivo — haz clic para ver el gráfico completo
         </div>
       </div>
 
-      <!-- TICKER TAPE — TradingView en tiempo real -->
-      <div style="margin-bottom:20px; border-radius:12px; overflow:hidden; border:1px solid var(--border);">
+      <!-- TICKER TAPE — solo los 11 del radar -->
+      <div style="margin-bottom:28px; border-radius:12px; overflow:hidden; border:1px solid var(--border);">
         <div class="tradingview-widget-container">
           <div class="tradingview-widget-container__widget"></div>
           <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
           {
             "symbols": [
-              {"proName":"NASDAQ:ADMA","title":"ADMA"},{"proName":"NASDAQ:PDYN","title":"PDYN"},
-              {"proName":"NASDAQ:ABCL","title":"ABCL"},{"proName":"NYSE:NRDY","title":"NRDY"},
-              {"proName":"NASDAQ:RGTI","title":"RGTI"},{"proName":"NASDAQ:RZLV","title":"RZLV"},
-              {"proName":"NYSE:WBX","title":"WBX"},{"proName":"NYSE:ZTS","title":"ZTS"},
-              {"proName":"AMEX:ARKK","title":"ARKK"},{"proName":"NASDAQ:CRSP","title":"CRSP"},
-              {"proName":"NASDAQ:BIDU","title":"BIDU"},{"proName":"NASDAQ:LYFT","title":"LYFT"},
-              {"proName":"NYSE:PGR","title":"PGR"},{"proName":"NASDAQ:NBIS","title":"NBIS"},
-              {"proName":"NASDAQ:LSCC","title":"LSCC"},{"proName":"NASDAQ:HOOD","title":"HOOD"},
-              {"proName":"NYSE:AMPX","title":"AMPX"},{"proName":"NASDAQ:JD","title":"JD"},
-              {"proName":"NASDAQ:LUNR","title":"LUNR"},{"proName":"NYSE:RBLX","title":"RBLX"},
-              {"proName":"NYSE:MYO","title":"MYO"},{"proName":"NASDAQ:MRVL","title":"MRVL"},
-              {"proName":"NYSE:SMR","title":"SMR"},{"proName":"NASDAQ:CEG","title":"CEG"},
-              {"proName":"AMEX:VIG","title":"VIG"},{"proName":"NYSE:ONON","title":"ONON"},
-              {"proName":"NYSE:BE","title":"BE"},{"proName":"NASDAQ:CRDO","title":"CRDO"},
-              {"proName":"NASDAQ:AIP","title":"AIP"},{"proName":"NASDAQ:TER","title":"TER"},
-              {"proName":"NASDAQ:TEM","title":"TEM"},{"proName":"NASDAQ:SYM","title":"SYM"},
-              {"proName":"NASDAQ:IREN","title":"IREN"},{"proName":"NASDAQ:EOSE","title":"EOSE"},
-              {"proName":"NASDAQ:ONDS","title":"ONDS"},{"proName":"NYSE:PL","title":"PL"},
-              {"proName":"NASDAQ:RKLB","title":"RKLB"},{"proName":"NYSE:RDW","title":"RDW"},
-              {"proName":"NYSE:GSAT","title":"GSAT"},{"proName":"NYSE:XPEV","title":"XPEV"},
-              {"proName":"NASDAQ:ASTS","title":"ASTS"},{"proName":"NASDAQ:SNDK","title":"SNDK"},
-              {"proName":"NASDAQ:SKYT","title":"SKYT"},{"proName":"NYSE:ZETA","title":"ZETA"},
-              {"proName":"NASDAQ:SOFI","title":"SOFI"},{"proName":"NASDAQ:INTU","title":"INTU"}
+              {"proName":"NYSE:AMPX","title":"AMPX"},
+              {"proName":"NASDAQ:ASTS","title":"ASTS"},
+              {"proName":"NASDAQ:BIDU","title":"BIDU"},
+              {"proName":"NASDAQ:CRSP","title":"CRSP"},
+              {"proName":"NASDAQ:HOOD","title":"HOOD"},
+              {"proName":"NASDAQ:LUNR","title":"LUNR"},
+              {"proName":"NASDAQ:NBIS","title":"NBIS"},
+              {"proName":"NYSE:ONON","title":"ONON"},
+              {"proName":"NASDAQ:RKLB","title":"RKLB"},
+              {"proName":"NASDAQ:MU","title":"MU"},
+              {"proName":"NASDAQ:AVGO","title":"AVGO"}
             ],
             "showSymbolLogo": true,
             "isTransparent": true,
@@ -1926,49 +2041,292 @@
         </div>
       </div>
 
-      <!-- Stats rápidas -->
-      <div id="watchStats" style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px;"></div>
+      <!-- ⭐ EN DESTAQUE -->
+      <div class="radar-section-label">⭐ En destaque</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; margin-bottom:32px;">
 
-      <!-- Filtros -->
-      <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
-        <input type="text" id="watchSearch" class="filter-input" placeholder="Buscar ticker o nombre..." oninput="filterWatchlist()" style="width:220px;" />
-        <select id="watchFilterCartera" class="filter-select" onchange="filterWatchlist()">
-          <option value="">Todos</option>
-          <option value="si">En cartera</option>
-          <option value="no">Sin comprar</option>
-        </select>
-        <select id="watchFilterVar" class="filter-select" onchange="filterWatchlist()">
-          <option value="">Toda variación</option>
-          <option value="pos">Positivos</option>
-          <option value="neg">Negativos</option>
-        </select>
-        <select id="watchSort" class="filter-select" onchange="filterWatchlist()">
-          <option value="ticker">Ticker A-Z</option>
-          <option value="price_desc">Precio ↓</option>
-          <option value="price_asc">Precio ↑</option>
-          <option value="var_desc">Variación ↓</option>
-          <option value="var_asc">Variación ↑</option>
-        </select>
+        <!-- MU — Destacado -->
+        <div class="radar-card radar-card-destaque" onclick="openTVChart('NASDAQ:MU','Micron Technology')">
+          <div class="radar-card-top">
+            <span class="radar-rank radar-rank-destaque">★</span>
+            <div class="radar-info">
+              <div class="radar-company">Micron Technology</div>
+              <div class="radar-ticker-sub">MU · NASDAQ · IBKR</div>
+              <div class="radar-perf">
+                <div class="radar-month"><span class="radar-month-label">ENE</span><span class="radar-month-price">$414,88</span></div>
+                <div class="radar-month"><span class="radar-month-label">FEB</span><span class="radar-month-price">$412,37</span></div>
+                <div class="radar-month"><span class="radar-month-label">MAR</span><span class="radar-month-price radar-neg">$337,84</span></div>
+              </div>
+            </div>
+            <span class="pill pill-ibkr" style="margin-left:auto;">IBKR</span>
+          </div>
+          <div class="radar-widget">
+            <div class="tradingview-widget-container" style="height:200px;">
+              <div class="tradingview-widget-container__widget" style="height:200px;"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+              {"symbol":"NASDAQ:MU","width":"100%","height":200,"locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":false,"largeChartUrl":""}
+              </script>
+            </div>
+          </div>
+        </div>
+
+        <!-- AVGO — Destacado -->
+        <div class="radar-card radar-card-destaque" onclick="openTVChart('NASDAQ:AVGO','Broadcom')">
+          <div class="radar-card-top">
+            <span class="radar-rank radar-rank-destaque">★</span>
+            <div class="radar-info">
+              <div class="radar-company">Broadcom</div>
+              <div class="radar-ticker-sub">AVGO · NASDAQ · IBKR</div>
+              <div class="radar-perf">
+                <div class="radar-month"><span class="radar-month-label">ENE</span><span class="radar-month-price">$331,30</span></div>
+                <div class="radar-month"><span class="radar-month-label">FEB</span><span class="radar-month-price">$319,55</span></div>
+                <div class="radar-month"><span class="radar-month-label">MAR</span><span class="radar-month-price radar-neg">$309,51</span></div>
+              </div>
+            </div>
+            <span class="pill pill-ibkr" style="margin-left:auto;">IBKR</span>
+          </div>
+          <div class="radar-widget">
+            <div class="tradingview-widget-container" style="height:200px;">
+              <div class="tradingview-widget-container__widget" style="height:200px;"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+              {"symbol":"NASDAQ:AVGO","width":"100%","height":200,"locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":false,"largeChartUrl":""}
+              </script>
+            </div>
+          </div>
+        </div>
+
+        <!-- RKLB — Destacado -->
+        <div class="radar-card radar-card-destaque" onclick="openTVChart('NASDAQ:RKLB','Rocket Lab USA')">
+          <div class="radar-card-top">
+            <span class="radar-rank radar-rank-destaque">★</span>
+            <div class="radar-info">
+              <div class="radar-company">Rocket Lab USA</div>
+              <div class="radar-ticker-sub">RKLB · NASDAQ</div>
+              <div class="radar-perf">
+                <div class="radar-month"><span class="radar-month-label">ENE</span><span class="radar-month-price">$69,76</span></div>
+                <div class="radar-month"><span class="radar-month-label">FEB</span><span class="radar-month-price">$69,10</span></div>
+                <div class="radar-month"><span class="radar-month-label">MAR</span><span class="radar-month-price radar-neg">$64,22</span></div>
+              </div>
+            </div>
+            <span class="pill" style="margin-left:auto; background:var(--bg-tertiary); color:var(--text-muted);">Vendida</span>
+          </div>
+          <div class="radar-widget">
+            <div class="tradingview-widget-container" style="height:200px;">
+              <div class="tradingview-widget-container__widget" style="height:200px;"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+              {"symbol":"NASDAQ:RKLB","width":"100%","height":200,"locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":false,"largeChartUrl":""}
+              </script>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Tabla watchlist -->
-      <div class="card" style="padding:0; overflow:hidden;">
-        <table style="width:100%; border-collapse:collapse; font-size:13px;">
-          <thead>
-            <tr>
-              <th style="padding:12px 20px; text-align:left; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); background:var(--bg-secondary); border-bottom:1px solid var(--border);">Instrumento</th>
-              <th style="padding:12px 16px; text-align:right; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); background:var(--bg-secondary); border-bottom:1px solid var(--border);">Último</th>
-              <th style="padding:12px 16px; text-align:right; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); background:var(--bg-secondary); border-bottom:1px solid var(--border);">% Var.</th>
-              <th style="padding:12px 16px; text-align:right; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); background:var(--bg-secondary); border-bottom:1px solid var(--border);">Bid</th>
-              <th style="padding:12px 16px; text-align:right; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); background:var(--bg-secondary); border-bottom:1px solid var(--border);">Ask</th>
-              <th style="padding:12px 16px; text-align:right; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); background:var(--bg-secondary); border-bottom:1px solid var(--border);">Volumen</th>
-              <th style="padding:12px 16px; text-align:center; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); background:var(--bg-secondary); border-bottom:1px solid var(--border);">Estado</th>
-              <th style="padding:12px 20px; text-align:left; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); background:var(--bg-secondary); border-bottom:1px solid var(--border);">Notas</th>
-            </tr>
-          </thead>
-          <tbody id="watchlistBody"></tbody>
-        </table>
-      </div>
+      <!-- 👁️ EN SEGUIMIENTO -->
+      <div class="radar-section-label">👁️ En seguimiento</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;">
+
+        <!-- 01 AMPX -->
+        <div class="radar-card" onclick="openTVChart('NYSE:AMPX','Amprius Technologies')">
+          <div class="radar-card-top">
+            <span class="radar-rank">01</span>
+            <div class="radar-info">
+              <div class="radar-company">Amprius Technologies</div>
+              <div class="radar-ticker-sub">AMPX · NYSE</div>
+              <div class="radar-perf">
+                <div class="radar-month"><span class="radar-month-label">ENE</span><span class="radar-month-price">$9,21</span></div>
+                <div class="radar-month"><span class="radar-month-label">FEB</span><span class="radar-month-price">$10,73</span></div>
+                <div class="radar-month"><span class="radar-month-label">MAR</span><span class="radar-month-price radar-pos">$16,86</span></div>
+              </div>
+            </div>
+            <span class="pill pill-accion" style="margin-left:auto;">Radar</span>
+          </div>
+          <div class="radar-widget">
+            <div class="tradingview-widget-container" style="height:200px;">
+              <div class="tradingview-widget-container__widget" style="height:200px;"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+              {"symbol":"NYSE:AMPX","width":"100%","height":200,"locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":false,"largeChartUrl":""}
+              </script>
+            </div>
+          </div>
+        </div>
+
+        <!-- 02 ASTS -->
+        <div class="radar-card" onclick="openTVChart('NASDAQ:ASTS','AST SpaceMobile')">
+          <div class="radar-card-top">
+            <span class="radar-rank">02</span>
+            <div class="radar-info">
+              <div class="radar-company">AST SpaceMobile</div>
+              <div class="radar-ticker-sub">ASTS · NASDAQ</div>
+              <div class="radar-perf">
+                <div class="radar-month"><span class="radar-month-label">ENE</span><span class="radar-month-price">$111,21</span></div>
+                <div class="radar-month"><span class="radar-month-label">FEB</span><span class="radar-month-price">$79,19</span></div>
+                <div class="radar-month"><span class="radar-month-label">MAR</span><span class="radar-month-price radar-neg">$82,87</span></div>
+              </div>
+            </div>
+            <span class="pill pill-accion" style="margin-left:auto;">Radar</span>
+          </div>
+          <div class="radar-widget">
+            <div class="tradingview-widget-container" style="height:200px;">
+              <div class="tradingview-widget-container__widget" style="height:200px;"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+              {"symbol":"NASDAQ:ASTS","width":"100%","height":200,"locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":false,"largeChartUrl":""}
+              </script>
+            </div>
+          </div>
+        </div>
+
+        <!-- 03 BIDU -->
+        <div class="radar-card" onclick="openTVChart('NASDAQ:BIDU','Baidu')">
+          <div class="radar-card-top">
+            <span class="radar-rank">03</span>
+            <div class="radar-info">
+              <div class="radar-company">Baidu</div>
+              <div class="radar-ticker-sub">BIDU · NASDAQ</div>
+              <div class="radar-perf">
+                <div class="radar-month"><span class="radar-month-label">ENE</span><span class="radar-month-price">$150,30</span></div>
+                <div class="radar-month"><span class="radar-month-label">FEB</span><span class="radar-month-price">$124,44</span></div>
+                <div class="radar-month"><span class="radar-month-label">MAR</span><span class="radar-month-price radar-neg">$111,42</span></div>
+              </div>
+            </div>
+            <span class="pill pill-accion" style="margin-left:auto;">Radar</span>
+          </div>
+          <div class="radar-widget">
+            <div class="tradingview-widget-container" style="height:200px;">
+              <div class="tradingview-widget-container__widget" style="height:200px;"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+              {"symbol":"NASDAQ:BIDU","width":"100%","height":200,"locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":false,"largeChartUrl":""}
+              </script>
+            </div>
+          </div>
+        </div>
+
+        <!-- 04 CRSP -->
+        <div class="radar-card" onclick="openTVChart('NASDAQ:CRSP','CRISPR Therapeutics')">
+          <div class="radar-card-top">
+            <span class="radar-rank">04</span>
+            <div class="radar-info">
+              <div class="radar-company">CRISPR Therapeutics</div>
+              <div class="radar-ticker-sub">CRSP · NASDAQ · TR</div>
+              <div class="radar-perf">
+                <div class="radar-month"><span class="radar-month-label">ENE</span><span class="radar-month-price">$49,96</span></div>
+                <div class="radar-month"><span class="radar-month-label">FEB</span><span class="radar-month-price">$60,14</span></div>
+                <div class="radar-month"><span class="radar-month-label">MAR</span><span class="radar-month-price radar-neg">$47,57</span></div>
+              </div>
+            </div>
+            <span class="pill pill-tr" style="margin-left:auto;">TR</span>
+          </div>
+          <div class="radar-widget">
+            <div class="tradingview-widget-container" style="height:200px;">
+              <div class="tradingview-widget-container__widget" style="height:200px;"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+              {"symbol":"NASDAQ:CRSP","width":"100%","height":200,"locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":false,"largeChartUrl":""}
+              </script>
+            </div>
+          </div>
+        </div>
+
+        <!-- 05 HOOD -->
+        <div class="radar-card" onclick="openTVChart('NASDAQ:HOOD','Robinhood Markets')">
+          <div class="radar-card-top">
+            <span class="radar-rank">05</span>
+            <div class="radar-info">
+              <div class="radar-company">Robinhood Markets</div>
+              <div class="radar-ticker-sub">HOOD · NASDAQ · IBKR</div>
+              <div class="radar-perf">
+                <div class="radar-month"><span class="radar-month-label">ENE</span><span class="radar-month-price">$101,24</span></div>
+                <div class="radar-month"><span class="radar-month-label">FEB</span><span class="radar-month-price">$75,85</span></div>
+                <div class="radar-month"><span class="radar-month-label">MAR</span><span class="radar-month-price radar-neg">$69,30</span></div>
+              </div>
+            </div>
+            <span class="pill pill-ibkr" style="margin-left:auto;">IBKR</span>
+          </div>
+          <div class="radar-widget">
+            <div class="tradingview-widget-container" style="height:200px;">
+              <div class="tradingview-widget-container__widget" style="height:200px;"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+              {"symbol":"NASDAQ:HOOD","width":"100%","height":200,"locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":false,"largeChartUrl":""}
+              </script>
+            </div>
+          </div>
+        </div>
+
+        <!-- 06 LUNR -->
+        <div class="radar-card" onclick="openTVChart('NASDAQ:LUNR','Intuitive Machines')">
+          <div class="radar-card-top">
+            <span class="radar-rank">06</span>
+            <div class="radar-info">
+              <div class="radar-company">Intuitive Machines</div>
+              <div class="radar-ticker-sub">LUNR · NASDAQ</div>
+              <div class="radar-perf">
+                <div class="radar-month"><span class="radar-month-label">ENE</span><span class="radar-month-price">$16,23</span></div>
+                <div class="radar-month"><span class="radar-month-label">FEB</span><span class="radar-month-price">$16,48</span></div>
+                <div class="radar-month"><span class="radar-month-label">MAR</span><span class="radar-month-price radar-pos">$18,56</span></div>
+              </div>
+            </div>
+            <span class="pill" style="margin-left:auto; background:var(--bg-tertiary); color:var(--text-muted);">Vendida</span>
+          </div>
+          <div class="radar-widget">
+            <div class="tradingview-widget-container" style="height:200px;">
+              <div class="tradingview-widget-container__widget" style="height:200px;"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+              {"symbol":"NASDAQ:LUNR","width":"100%","height":200,"locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":false,"largeChartUrl":""}
+              </script>
+            </div>
+          </div>
+        </div>
+
+        <!-- 07 NBIS -->
+        <div class="radar-card" onclick="openTVChart('NASDAQ:NBIS','Nebius Group')">
+          <div class="radar-card-top">
+            <span class="radar-rank">07</span>
+            <div class="radar-info">
+              <div class="radar-company">Nebius Group</div>
+              <div class="radar-ticker-sub">NBIS · NASDAQ</div>
+              <div class="radar-perf">
+                <div class="radar-month"><span class="radar-month-label">ENE</span><span class="radar-month-price">$83,71</span></div>
+                <div class="radar-month"><span class="radar-month-label">FEB</span><span class="radar-month-price">$91,19</span></div>
+                <div class="radar-month"><span class="radar-month-label">MAR</span><span class="radar-month-price radar-pos">$103,76</span></div>
+              </div>
+            </div>
+            <span class="pill pill-accion" style="margin-left:auto;">Radar</span>
+          </div>
+          <div class="radar-widget">
+            <div class="tradingview-widget-container" style="height:200px;">
+              <div class="tradingview-widget-container__widget" style="height:200px;"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+              {"symbol":"NASDAQ:NBIS","width":"100%","height":200,"locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":false,"largeChartUrl":""}
+              </script>
+            </div>
+          </div>
+        </div>
+
+        <!-- 08 ONON -->
+        <div class="radar-card" onclick="openTVChart('NYSE:ONON','On Holdings')">
+          <div class="radar-card-top">
+            <span class="radar-rank">08</span>
+            <div class="radar-info">
+              <div class="radar-company">On Holdings</div>
+              <div class="radar-ticker-sub">ONON · NYSE</div>
+              <div class="radar-perf">
+                <div class="radar-month"><span class="radar-month-label">ENE</span><span class="radar-month-price">$46,48</span></div>
+                <div class="radar-month"><span class="radar-month-label">FEB</span><span class="radar-month-price">$46,48</span></div>
+                <div class="radar-month"><span class="radar-month-label">MAR</span><span class="radar-month-price radar-neg">$34,02</span></div>
+              </div>
+            </div>
+            <span class="pill pill-accion" style="margin-left:auto;">Radar</span>
+          </div>
+          <div class="radar-widget">
+            <div class="tradingview-widget-container" style="height:200px;">
+              <div class="tradingview-widget-container__widget" style="height:200px;"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+              {"symbol":"NYSE:ONON","width":"100%","height":200,"locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":false,"largeChartUrl":""}
+              </script>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /grid -->
 
     </div>
   </div>
@@ -2245,7 +2603,9 @@
 
     function fmtPct(value) {
       if (value === null || value === undefined) return '—';
-      return (value >= 0 ? '+' : '') + value.toFixed(2).replace('.', ',') + '%';
+      const abs = Math.abs(value);
+      const sign = value >= 0 ? '+' : '-';
+      return sign + abs.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
     }
 
     function fmtNum(value, decimals = 2) {
@@ -2392,7 +2752,7 @@
           <div class="bar-track" style="background:${c.dim};">
             <div class="bar-fill" style="width:${pct}%; background: linear-gradient(90deg, ${c.fill}BB, ${c.fill});">
               <span class="bar-fill-label">${labels[t]}</span>
-              <span class="bar-fill-pct">${pct.toFixed(1).replace('.',',')}%</span>
+              <span class="bar-fill-pct">${pct.toLocaleString('es-ES',{minimumFractionDigits:1,maximumFractionDigits:1})}%</span>
             </div>
             <span class="bar-val-right">${fmt(val)}</span>
           </div>
@@ -2404,7 +2764,7 @@
       const badgeEl = document.getElementById('barResultBadge');
       if (totalEl) totalEl.textContent = fmt(total, 0);
       if (badgeEl) {
-        badgeEl.textContent = `${isPosResult ? '↑' : '↓'} ${Math.abs(pnlPct).toFixed(2).replace('.',',')}%`;
+        badgeEl.textContent = `${isPosResult ? '↑' : '↓'} ${Math.abs(pnlPct).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}%`;
         badgeEl.className   = `bar-result-badge ${isPosResult ? 'pos' : 'neg'}`;
       }
 
@@ -2418,7 +2778,7 @@
           return `
             <div class="bar-legend-item">
               <span class="bar-legend-pill" style="background:${c.fill}">${labels[t]}</span>
-              <span class="bar-legend-pct" style="color:${c.fill}">${pct.toFixed(1).replace('.',',')}%</span>
+              <span class="bar-legend-pct" style="color:${c.fill}">${pct.toLocaleString('es-ES',{minimumFractionDigits:1,maximumFractionDigits:1})}%</span>
             </div>
           `;
         }).join('');
@@ -2583,7 +2943,7 @@
           : '<span class="td-neutral">—</span>';
 
         const pnlPctHtml = p.pnl_pct !== null
-          ? `<span class="${p.pnl_pct >= 0 ? 'td-pnl-pos' : 'td-pnl-neg'}">${p.pnl_pct >= 0 ? '↑' : '↓'} ${Math.abs(p.pnl_pct).toFixed(2).replace('.',',')}%</span>`
+          ? `<span class="${p.pnl_pct >= 0 ? 'td-pnl-pos' : 'td-pnl-neg'}">${p.pnl_pct >= 0 ? '↑' : '↓'} ${Math.abs(p.pnl_pct).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}%</span>`
           : '<span class="td-neutral">—</span>';
 
         const brokerRowClass = { 'Trade Republic': 'row-tr', 'IBKR': 'row-ibkr', 'Kraken': 'row-kraken' }[p.broker] || '';
@@ -2637,7 +2997,7 @@
           <td class="td-right">
             <span class="total-label">Resultado %</span>
             <span class="total-value ${pnlColorClass}">
-              ${hasPnl && totalPnlPct !== null ? `${arrow} ${Math.abs(totalPnlPct).toFixed(2).replace('.',',')}%` : '—'}
+              ${hasPnl && totalPnlPct !== null ? `${arrow} ${Math.abs(totalPnlPct).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}%` : '—'}
             </span>
           </td>
           <td colspan="2"></td>
@@ -3108,7 +3468,7 @@
               ${fmtPrice(w.last)}
             </td>
             <td style="padding:12px 16px; text-align:right; font-weight:600; color:${varColor};">
-              ${varSign}${w.var.toFixed(2).replace('.',',')} %
+              ${varSign}${w.var.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})} %
             </td>
             <td style="padding:12px 16px; text-align:right; color:var(--text-secondary); font-variant-numeric:tabular-nums;">
               ${fmtPrice(w.bid)}
@@ -3233,7 +3593,7 @@
       function posItemHtml(p, blockTotal) {
         const weight = blockTotal ? (p.value / blockTotal * 100) : 0;
         const pnlHtml = p.pnl_pct !== null
-          ? `<div class="horizonte-pos-pnl ${p.pnl_pct >= 0 ? 'pos' : 'neg'}">${p.pnl_pct >= 0 ? '↑' : '↓'} ${Math.abs(p.pnl_pct).toFixed(2).replace('.',',')}%</div>`
+          ? `<div class="horizonte-pos-pnl ${p.pnl_pct >= 0 ? 'pos' : 'neg'}">${p.pnl_pct >= 0 ? '↑' : '↓'} ${Math.abs(p.pnl_pct).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}%</div>`
           : `<div class="horizonte-pos-pnl neu">—</div>`;
 
         const typeColors = { 'ETF': '#A78BFA', 'Acción': '#4F8EF7', 'Crypto': '#F97316' };
