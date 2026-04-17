@@ -1869,7 +1869,7 @@
         <button class="currency-btn" id="btnUsd" onclick="setCurrency('USD')">USD $</button>
       </div>
       <button class="btn-theme" id="btnTheme" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
-      <span class="last-update">Actualizado: 12 abr 2026</span>
+      <span class="last-update">Actualizado: 17 abr 2026</span>
     </div>
   </nav>
 
@@ -2518,27 +2518,27 @@
        DATOS INICIALES DE POSICIONES
        ========================================================= */
     /* Versión de datos — al cambiar fuerza reset del localStorage */
-    const DATA_VERSION = '2026-04-07-v1';
+    const DATA_VERSION = '2026-04-17-v1';
 
     const INITIAL_POSITIONS = [
-      // TRADE REPUBLIC — ETFs (datos exactos de TR, 2 abr 2026)
-      { ticker: 'CNDX',   name: 'NASDAQ 100 USD (Acc)',              type: 'ETF',    broker: 'Trade Republic', value: 694.28, cost: 672.50, pnl_eur:  21.78, pnl_pct:  3.24  },
-      { ticker: 'ISPY',   name: 'Space Innovators USD (Acc)',         type: 'ETF',    broker: 'Trade Republic', value: 514.85, cost: 366.82, pnl_eur: 148.03, pnl_pct: 40.35  },
-      { ticker: 'SGLN',   name: 'Physical Gold USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 217.17, cost: 176.37, pnl_eur:  40.80, pnl_pct: 23.13  },
-      { ticker: 'VDAI',   name: 'AI & Big Data USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 156.04, cost: 149.99, pnl_eur:   6.05, pnl_pct:  4.03  },
-      { ticker: 'AIRO',   name: 'Artificial Intelligence & Robotics', type: 'ETF',    broker: 'Trade Republic', value: 143.79, cost: 140.00, pnl_eur:   3.79, pnl_pct:  2.71  },
-      { ticker: 'CXCN',   name: 'MSCI China Tech USD (Acc)',          type: 'ETF',    broker: 'Trade Republic', value: 107.20, cost: 120.01, pnl_eur: -12.81, pnl_pct: -10.67 },
-      // TRADE REPUBLIC — Acciones (datos exactos de TR, 2 abr 2026)
-      { ticker: 'UBER',   name: 'Uber Technologies',                  type: 'Acción', broker: 'Trade Republic', value: 317.41, cost: 318.84, pnl_eur:  -1.43, pnl_pct: -0.45  },
-      { ticker: 'QBTS',   name: 'D-Wave Quantum',                     type: 'Acción', broker: 'Trade Republic', value: 297.07, cost: 335.00, pnl_eur: -37.93, pnl_pct: -11.32 },
-      { ticker: 'IREN',   name: 'IREN Limited',                       type: 'Acción', broker: 'Trade Republic', value: 177.13, cost: 201.00, pnl_eur: -23.87, pnl_pct: -11.88 },
-      { ticker: 'CRSP',   name: 'CRISPR Therapeutics',                type: 'Acción', broker: 'Trade Republic', value: 145.64, cost: 160.01, pnl_eur: -14.37, pnl_pct: -8.98  },
-      // TRADE REPUBLIC — Crypto (datos exactos de TR, 2 abr 2026)
-      { ticker: 'BTC-TR', name: 'Bitcoin (Trade Republic)',           type: 'Crypto', broker: 'Trade Republic', value: 433.13, cost: 564.25, pnl_eur: -131.12, pnl_pct: -23.24 },
-      // IBKR — Acciones (actualizado 7 abr 2026: vendidas LUNR y BIDU, nuevas MU y AVGO)
-      { ticker: 'MU',     name: 'Micron Technology',                  type: 'Acción', broker: 'IBKR',           value: 323.97, cost: 323.77, pnl_eur:   0.28, pnl_pct:  0.09  },
-      { ticker: 'AVGO',   name: 'Broadcom Inc.',                      type: 'Acción', broker: 'IBKR',           value: 211.35, cost: 211.93, pnl_eur:  -0.66, pnl_pct: -0.31  },
-      { ticker: 'HOOD',   name: 'Robinhood Markets',                  type: 'Acción', broker: 'IBKR',           value: 510.76, cost: 610.31, pnl_eur:-100.74, pnl_pct:-16.51  },
+      // TRADE REPUBLIC — ETFs (datos exactos de TR, 17 abr 2026)
+      { ticker: 'CNDX',   name: 'NASDAQ 100 USD (Acc)',              type: 'ETF',    broker: 'Trade Republic', value: 749.46, cost: 672.58, pnl_eur:  76.88, pnl_pct: 11.44  },
+      { ticker: 'ISPY',   name: 'Space Innovators USD (Acc)',         type: 'ETF',    broker: 'Trade Republic', value: 620.18, cost: 392.19, pnl_eur: 227.99, pnl_pct: 58.13  },
+      { ticker: 'SGLN',   name: 'Physical Gold USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 221.06, cost: 176.38, pnl_eur:  44.68, pnl_pct: 25.33  },
+      { ticker: 'VDAI',   name: 'AI & Big Data USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 174.50, cost: 150.00, pnl_eur:  24.50, pnl_pct: 16.33  },
+      { ticker: 'AIRO',   name: 'Artificial Intelligence & Robotics', type: 'ETF',    broker: 'Trade Republic', value: 160.73, cost: 140.00, pnl_eur:  20.73, pnl_pct: 14.81  },
+      { ticker: 'CXCN',   name: 'MSCI China Tech USD (Acc)',          type: 'ETF',    broker: 'Trade Republic', value: 116.88, cost: 120.00, pnl_eur:  -3.12, pnl_pct: -2.60  },
+      // TRADE REPUBLIC — Acciones (datos exactos de TR, 17 abr 2026)
+      { ticker: 'QBTS',   name: 'D-Wave Quantum',                     type: 'Acción', broker: 'Trade Republic', value: 445.12, cost: 335.01, pnl_eur: 110.11, pnl_pct: 32.87  },
+      { ticker: 'IREN',   name: 'IREN Limited',                       type: 'Acción', broker: 'Trade Republic', value: 213.38, cost: 175.24, pnl_eur:  38.14, pnl_pct: 21.76  },
+      { ticker: 'CRSP',   name: 'CRISPR Therapeutics',                type: 'Acción', broker: 'Trade Republic', value: 162.45, cost: 160.00, pnl_eur:   2.45, pnl_pct:  1.53  },
+      // TRADE REPUBLIC — Crypto (datos exactos de TR, 17 abr 2026)
+      { ticker: 'BTC-TR', name: 'Bitcoin (Trade Republic)',           type: 'Crypto', broker: 'Trade Republic', value: 463.46, cost: 564.29, pnl_eur: -100.83, pnl_pct: -17.86 },
+      // IBKR — Acciones (actualizado 17 abr 2026: vendida HOOD, nuevas MSFT y VST)
+      { ticker: 'MU',     name: 'Micron Technology',                  type: 'Acción', broker: 'IBKR',           value: 335.11, cost: 295.64, pnl_eur:  39.47, pnl_pct: 13.37  },
+      { ticker: 'MSFT',   name: 'Microsoft Corporation',              type: 'Acción', broker: 'IBKR',           value: 261.21, cost: 229.83, pnl_eur:  31.38, pnl_pct: 13.65  },
+      { ticker: 'VST',    name: 'Vistra Corp.',                       type: 'Acción', broker: 'IBKR',           value: 247.72, cost: 230.76, pnl_eur:  16.96, pnl_pct:  7.39  },
+      { ticker: 'AVGO',   name: 'Broadcom Inc.',                      type: 'Acción', broker: 'IBKR',           value: 207.65, cost: 193.51, pnl_eur:  14.14, pnl_pct:  7.31  },
       // KRAKEN — Crypto (datos exactos de Kraken, 2 abr 2026)
       { ticker: 'BTC-K',  name: 'Bitcoin (Kraken)',                   type: 'Crypto', broker: 'Kraken',         value: 250.73, cost: 339.83, pnl_eur: -89.11, pnl_pct: -26.22 },
     ];
@@ -2554,9 +2554,9 @@
 
     /* P&L por broker calculado desde capturas (en EUR) */
     const PNL_BROKERS = {
-      'Trade Republic': -1.08,   // actualizado 2 abr 2026
-      'IBKR':           -91.35,  // actualizado 7 abr 2026 (MU +0.28, AVGO -0.66, HOOD -100.74)
-      'Kraken':         -89.11,  // actualizado 2 abr 2026
+      'Trade Republic': 441.53,  // actualizado 17 abr 2026
+      'IBKR':           102.00,  // actualizado 17 abr 2026 (MU+MSFT+VST+AVGO)
+      'Kraken':         -89.11,  // sin cambios
     };
 
     /* Tipo de cambio EUR → USD */
