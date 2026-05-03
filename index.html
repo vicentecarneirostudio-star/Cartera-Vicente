@@ -1764,6 +1764,77 @@
       margin-bottom: 14px;
     }
 
+    /* ============ HEATMAP (cuadrados) ============ */
+    .heatmap-group {
+      margin-bottom: 18px;
+    }
+    .heatmap-group-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 78px;
+      gap: 4px;
+    }
+    .heatmap-tile {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 6px;
+      padding: 4px 6px;
+      color: #fff;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+    }
+    .heatmap-tile:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+      filter: brightness(1.1);
+      z-index: 2;
+    }
+    .heatmap-tile .ticker {
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.45);
+    }
+    .heatmap-tile .pct {
+      margin-top: 4px;
+      font-weight: 600;
+      line-height: 1;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.45);
+    }
+    /* Tile size variants (cols x rows) */
+    .hm-xl { grid-column: span 4; grid-row: span 2; }
+    .hm-lg { grid-column: span 3; grid-row: span 2; }
+    .hm-md { grid-column: span 3; grid-row: span 1; }
+    .hm-sm { grid-column: span 2; grid-row: span 1; }
+    .hm-xs { grid-column: span 2; grid-row: span 1; }
+    /* Font scale per size */
+    .hm-xl .ticker { font-size: 26px; }   .hm-xl .pct { font-size: 15px; }
+    .hm-lg .ticker { font-size: 22px; }   .hm-lg .pct { font-size: 13px; }
+    .hm-md .ticker { font-size: 18px; }   .hm-md .pct { font-size: 12px; }
+    .hm-sm .ticker { font-size: 15px; }   .hm-sm .pct { font-size: 11px; }
+    .hm-xs .ticker { font-size: 14px; }   .hm-xs .pct { font-size: 10px; }
+
+    @media (max-width: 720px) {
+      .heatmap-grid { grid-template-columns: repeat(6, 1fr); grid-auto-rows: 68px; }
+      .hm-xl { grid-column: span 3; grid-row: span 2; }
+      .hm-lg { grid-column: span 3; grid-row: span 2; }
+      .hm-md { grid-column: span 3; }
+      .hm-sm { grid-column: span 2; }
+      .hm-xs { grid-column: span 2; }
+    }
+
     /* Radar monthly prices */
     .radar-perf {
       display: flex;
@@ -1870,7 +1941,7 @@
         <button class="currency-btn" id="btnUsd" onclick="setCurrency('USD')">USD $</button>
       </div>
       <button class="btn-theme" id="btnTheme" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
-      <span class="last-update">Actualizado: 17 abr 2026</span>
+      <span class="last-update">Actualizado: 3 may 2026</span>
     </div>
   </nav>
 
@@ -2042,6 +2113,36 @@
           }
           </script>
         </div>
+      </div>
+
+      <!-- MAPA DE CALOR — Stock Heatmap oficial de TradingView (S&P 500) -->
+      <div style="margin-bottom:32px;">
+        <div style="font-size:13px; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px;">Mapa de calor del mercado</div>
+        <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border); background:var(--bg-card);">
+          <div class="tradingview-widget-container" style="height:900px;">
+            <div class="tradingview-widget-container__widget" style="height:100%;"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
+            {
+              "exchanges": [],
+              "dataSource": "SPX500",
+              "grouping": "sector",
+              "blockSize": "market_cap_basic",
+              "blockColor": "change",
+              "locale": "es",
+              "symbolUrl": "",
+              "colorTheme": "dark",
+              "hasTopBar": true,
+              "isDataSetEnabled": true,
+              "isZoomEnabled": true,
+              "hasSymbolTooltip": true,
+              "isMonoSize": false,
+              "width": "100%",
+              "height": "100%"
+            }
+            </script>
+          </div>
+        </div>
+        <div style="margin-top:8px; font-size:11px; color:var(--text-muted);">Heatmap live del S&P 500 · puedes cambiar el índice (Nasdaq 100, NYSE, etc.) desde el menú superior del widget</div>
       </div>
 
       <!-- ⭐ EN DESTAQUE -->
@@ -2519,7 +2620,7 @@
        DATOS INICIALES DE POSICIONES
        ========================================================= */
     /* Versión de datos — al cambiar fuerza reset del localStorage */
-    const DATA_VERSION = '2026-04-17-v1';
+    const DATA_VERSION = '2026-05-03-v1';
 
     const INITIAL_POSITIONS = [
       // TRADE REPUBLIC — ETFs (datos exactos de TR, 17 abr 2026)
@@ -2535,11 +2636,10 @@
       { ticker: 'CRSP',   name: 'CRISPR Therapeutics',                type: 'Acción', broker: 'Trade Republic', value: 162.45, cost: 160.00, pnl_eur:   2.45, pnl_pct:  1.53  },
       // TRADE REPUBLIC — Crypto (datos exactos de TR, 17 abr 2026)
       { ticker: 'BTC-TR', name: 'Bitcoin (Trade Republic)',           type: 'Crypto', broker: 'Trade Republic', value: 463.46, cost: 564.29, pnl_eur: -100.83, pnl_pct: -17.86 },
-      // IBKR — Acciones (actualizado 17 abr 2026: vendida HOOD, nuevas MSFT y VST)
-      { ticker: 'MU',     name: 'Micron Technology',                  type: 'Acción', broker: 'IBKR',           value: 335.11, cost: 295.64, pnl_eur:  39.47, pnl_pct: 13.37  },
-      { ticker: 'MSFT',   name: 'Microsoft Corporation',              type: 'Acción', broker: 'IBKR',           value: 261.21, cost: 229.83, pnl_eur:  31.38, pnl_pct: 13.65  },
-      { ticker: 'VST',    name: 'Vistra Corp.',                       type: 'Acción', broker: 'IBKR',           value: 247.72, cost: 230.76, pnl_eur:  16.96, pnl_pct:  7.39  },
-      { ticker: 'AVGO',   name: 'Broadcom Inc.',                      type: 'Acción', broker: 'IBKR',           value: 207.65, cost: 193.51, pnl_eur:  14.14, pnl_pct:  7.31  },
+      // IBKR — Acciones (actualizado 3 may 2026: vendidas MU/MSFT/VST/AVGO, nuevas LLY/NBIS/OKLO)
+      { ticker: 'LLY',    name: 'Eli Lilly and Company',              type: 'Acción', broker: 'IBKR',           value: 400.49, cost: 367.12, pnl_eur:  33.37, pnl_pct:  9.09  },
+      { ticker: 'NBIS',   name: 'Nebius Group',                       type: 'Acción', broker: 'IBKR',           value: 236.78, cost: 206.74, pnl_eur:  30.04, pnl_pct: 14.53  },
+      { ticker: 'OKLO',   name: 'Oklo Inc.',                          type: 'Acción', broker: 'IBKR',           value: 234.21, cost: 215.93, pnl_eur:  18.28, pnl_pct:  8.46  },
       // KRAKEN — Crypto (datos exactos de Kraken, 2 abr 2026)
       { ticker: 'BTC-K',  name: 'Bitcoin (Kraken)',                   type: 'Crypto', broker: 'Kraken',         value: 250.73, cost: 339.83, pnl_eur: -89.11, pnl_pct: -26.22 },
     ];
@@ -2556,12 +2656,12 @@
     /* P&L por broker calculado desde capturas (en EUR) */
     const PNL_BROKERS = {
       'Trade Republic': 441.53,  // actualizado 17 abr 2026
-      'IBKR':           102.00,  // actualizado 17 abr 2026 (MU+MSFT+VST+AVGO)
+      'IBKR':            81.56,  // actualizado 3 may 2026 (LLY+NBIS+OKLO)
       'Kraken':         -89.11,  // sin cambios
     };
 
-    /* Tipo de cambio EUR → USD */
-    const EUR_USD = 1.082;
+    /* Tipo de cambio EUR → USD (3 may 2026, rate implícito IBKR) */
+    const EUR_USD = 1.172;
 
     /* =========================================================
        ESTADO DE LA APP
@@ -3500,6 +3600,120 @@
     function renderWatchlist() {
       renderWatchStats();
       renderWatchlistTable();
+      renderHeatmap();
+    }
+
+    /* =========================================================
+       HEATMAP — Mapa de calor con cuadrados
+       ========================================================= */
+    /* Cambio % del día (snapshot manual — edítalo cuando quieras) */
+    const HEATMAP_DAY_PCT = {
+      // Posiciones
+      CNDX: 1.68, ISPY: 2.10, 'BTC-TR': -0.85, QBTS: 3.05, MU: 1.68,
+      MSFT: 0.60, VST: 3.01, SGLN: 0.42, IREN: 1.95, AVGO: 2.03,
+      VDAI: 1.20, CRSP: 1.53, AIRO: 0.78, CXCN: -1.15, 'BTC-K': -0.85,
+      // Seguimiento
+      AMPX: 0.90, ASTS: -0.45, BIDU: -1.80, HOOD: 1.20, LUNR: 2.40,
+      NBIS: 1.65, ONON: -0.60, RKLB: 2.10
+    };
+
+    const HEATMAP_OWNED = [
+      { ticker: 'CNDX',   name: 'NASDAQ 100',        value: 749.46, tvSymbol: 'LSE:CNDX' },
+      { ticker: 'ISPY',   name: 'Space Innovators',  value: 620.18, tvSymbol: 'LSE:ISPY' },
+      { ticker: 'BTC-TR', name: 'Bitcoin (TR)',      value: 463.46, tvSymbol: 'COINBASE:BTCUSD' },
+      { ticker: 'QBTS',   name: 'D-Wave Quantum',    value: 445.12, tvSymbol: 'NYSE:QBTS' },
+      { ticker: 'MU',     name: 'Micron Technology', value: 335.11, tvSymbol: 'NASDAQ:MU' },
+      { ticker: 'MSFT',   name: 'Microsoft',         value: 261.21, tvSymbol: 'NASDAQ:MSFT' },
+      { ticker: 'BTC-K',  name: 'Bitcoin (Kraken)',  value: 250.73, tvSymbol: 'COINBASE:BTCUSD' },
+      { ticker: 'VST',    name: 'Vistra',            value: 247.72, tvSymbol: 'NYSE:VST' },
+      { ticker: 'SGLN',   name: 'Physical Gold',     value: 221.06, tvSymbol: 'LSE:SGLN' },
+      { ticker: 'IREN',   name: 'IREN Limited',      value: 213.38, tvSymbol: 'NASDAQ:IREN' },
+      { ticker: 'AVGO',   name: 'Broadcom',          value: 207.65, tvSymbol: 'NASDAQ:AVGO' },
+      { ticker: 'VDAI',   name: 'AI & Big Data',     value: 174.50, tvSymbol: 'LSE:VDAI' },
+      { ticker: 'CRSP',   name: 'CRISPR',            value: 162.45, tvSymbol: 'NASDAQ:CRSP' },
+      { ticker: 'AIRO',   name: 'AI & Robotics',     value: 160.73, tvSymbol: 'LSE:AIRO' },
+      { ticker: 'CXCN',   name: 'MSCI China Tech',   value: 116.88, tvSymbol: 'LSE:CXCN' }
+    ];
+    const HEATMAP_WATCH = [
+      { ticker: 'AMPX', name: 'Amprius Technologies', tvSymbol: 'NYSE:AMPX' },
+      { ticker: 'ASTS', name: 'AST SpaceMobile',      tvSymbol: 'NASDAQ:ASTS' },
+      { ticker: 'BIDU', name: 'Baidu',                tvSymbol: 'NASDAQ:BIDU' },
+      { ticker: 'HOOD', name: 'Robinhood',            tvSymbol: 'NASDAQ:HOOD' },
+      { ticker: 'LUNR', name: 'Intuitive Machines',   tvSymbol: 'NASDAQ:LUNR' },
+      { ticker: 'NBIS', name: 'Nebius Group',         tvSymbol: 'NASDAQ:NBIS' },
+      { ticker: 'ONON', name: 'On Holding',           tvSymbol: 'NYSE:ONON' },
+      { ticker: 'RKLB', name: 'Rocket Lab USA',       tvSymbol: 'NASDAQ:RKLB' }
+    ];
+
+    /* Color interpolado según % del día (de -3% a +3%) */
+    function heatmapColor(pct) {
+      const p = Math.max(-3, Math.min(3, pct)); // clamp a [-3, 3]
+      // stops: -3 → #CC2E3E, -1.5 → #8A3A44, 0 → #3A3F47, +1.5 → #1E6F38, +3 → #17A028
+      const stops = [
+        { t: -3, c: [204, 46, 62]  },
+        { t: -1.5, c: [138, 58, 68] },
+        { t: 0,    c: [58, 63, 71] },
+        { t: 1.5,  c: [30, 111, 56] },
+        { t: 3,    c: [23, 160, 40] }
+      ];
+      for (let i = 0; i < stops.length - 1; i++) {
+        const a = stops[i], b = stops[i+1];
+        if (p >= a.t && p <= b.t) {
+          const r = (p - a.t) / (b.t - a.t);
+          const rgb = a.c.map((ai, idx) => Math.round(ai + (b.c[idx] - ai) * r));
+          return `rgb(${rgb.join(',')})`;
+        }
+      }
+      return '#3A3F47';
+    }
+
+    /* Decide tamaño por valor (posiciones) o fijo (seguimiento) */
+    function heatmapSize(value) {
+      if (value == null)     return 'hm-xs';
+      if (value >= 500)      return 'hm-xl';
+      if (value >= 300)      return 'hm-lg';
+      if (value >= 200)      return 'hm-md';
+      if (value >= 130)      return 'hm-sm';
+      return 'hm-xs';
+    }
+
+    function heatmapTileHTML(item, isOwned) {
+      const pct = HEATMAP_DAY_PCT[item.ticker];
+      const hasPct = typeof pct === 'number';
+      const color = hasPct ? heatmapColor(pct) : '#3A3F47';
+      const size = isOwned ? heatmapSize(item.value) : 'hm-xs';
+      const pctText = hasPct
+        ? (pct >= 0 ? '+' : '') + pct.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%'
+        : '—';
+      const safeName = (item.name || '').replace(/'/g, "\\'");
+      return `<div class="heatmap-tile ${size}" style="background:${color};"
+           onclick="openTVChartFromHeatmap('${item.tvSymbol}','${item.ticker}','${safeName}')">
+        <span class="ticker">${item.ticker}</span>
+        <span class="pct">${pctText}</span>
+      </div>`;
+    }
+
+    function openTVChartFromHeatmap(tvSymbol, ticker, name) {
+      // Si openTVChart existe, la usamos (mapea ticker→exchange internamente).
+      if (typeof openTVChart === 'function') { openTVChart(ticker, name); return; }
+      window.open('https://www.tradingview.com/symbols/' + encodeURIComponent(tvSymbol) + '/', '_blank');
+    }
+
+    function renderHeatmap() {
+      const container = document.getElementById('heatmapContainer');
+      if (!container) return;
+      const ownedHtml = HEATMAP_OWNED.map(p => heatmapTileHTML(p, true)).join('');
+      const watchHtml = HEATMAP_WATCH.map(p => heatmapTileHTML(p, false)).join('');
+      container.innerHTML = `
+        <div class="heatmap-group">
+          <div class="heatmap-group-title">Mis posiciones</div>
+          <div class="heatmap-grid">${ownedHtml}</div>
+        </div>
+        <div class="heatmap-group">
+          <div class="heatmap-group-title">Seguimiento</div>
+          <div class="heatmap-grid">${watchHtml}</div>
+        </div>
+      `;
     }
 
     /* =========================================================
