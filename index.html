@@ -539,10 +539,22 @@
       line-height: 1.1;
     }
     .proy-control-value.blue { color: var(--accent-blue); }
-    .proy-range {
+    .proy-range,
+    input[type="range"].proy-range {
       width: 100%;
+      -webkit-appearance: auto;
+      appearance: auto;
       accent-color: var(--accent-blue);
       cursor: pointer;
+      background: transparent;
+      height: auto;
+    }
+    .proy-range::-webkit-slider-thumb {
+      -webkit-appearance: auto;
+      appearance: auto;
+      background: initial;
+      width: initial;
+      height: initial;
     }
     .proy-range-labels {
       display: flex;
