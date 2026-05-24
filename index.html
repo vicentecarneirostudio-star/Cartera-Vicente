@@ -4365,17 +4365,29 @@
         id: 'barLabel',
         afterDatasetsDraw(chart) {
           const { ctx } = chart;
-          const meta = chart.getDatasetMeta(0);
-          if (!meta || meta.hidden) return;
           ctx.save();
-          ctx.fillStyle = '#e2e8f0';
           ctx.font = '600 10px system-ui, -apple-system, sans-serif';
           ctx.textAlign = 'center';
-          ctx.textBaseline = 'bottom';
-          meta.data.forEach((bar, i) => {
-            const val = chart.data.datasets[0].data[i];
-            ctx.fillText(fmtKShort(val), bar.x, bar.y - 4);
-          });
+          // Etiqueta azul (encima del total)
+          const metaBlue = chart.getDatasetMeta(0);
+          if (metaBlue && !metaBlue.hidden) {
+            ctx.fillStyle = '#93c5fd';
+            ctx.textBaseline = 'bottom';
+            metaBlue.data.forEach((bar, i) => {
+              const val = chart.data.datasets[0].data[i];
+              ctx.fillText(fmtKShort(val), bar.x, bar.y - 4);
+            });
+          }
+          // Etiqueta naranja (encima de capital invertido)
+          const metaOrange = chart.getDatasetMeta(1);
+          if (metaOrange && !metaOrange.hidden) {
+            ctx.fillStyle = '#fdba74';
+            ctx.textBaseline = 'bottom';
+            metaOrange.data.forEach((bar, i) => {
+              const val = chart.data.datasets[1].data[i];
+              ctx.fillText(fmtKShort(val), bar.x, bar.y - 4);
+            });
+          }
           ctx.restore();
         }
       };
@@ -4393,7 +4405,7 @@
               borderWidth: 1,
               borderRadius: 4,
               categoryPercentage: 0.9,
-              barPercentage: 0.95,
+              barPercentage: 0.85,
               grouped: false,
               order: 2
             },
@@ -4401,12 +4413,12 @@
               type: 'bar',
               label: 'Capital invertido (sin rentabilidad)',
               data: dataInvertido,
-              backgroundColor: 'rgba(251,146,60,0.7)',
-              borderColor: '#fb923c',
+              backgroundColor: 'rgba(249,115,22,0.95)',
+              borderColor: '#f97316',
               borderWidth: 1,
               borderRadius: 4,
               categoryPercentage: 0.9,
-              barPercentage: 0.55,
+              barPercentage: 0.85,
               grouped: false,
               order: 1
             }
