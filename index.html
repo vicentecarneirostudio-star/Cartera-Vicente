@@ -539,37 +539,72 @@
       line-height: 1.1;
     }
     .proy-control-value.blue { color: var(--accent-blue); }
-    .proy-range,
     input[type="range"].proy-range {
       width: 100%;
-      -webkit-appearance: auto;
-      appearance: auto;
-      accent-color: var(--accent-blue);
+      -webkit-appearance: none !important;
+      appearance: none !important;
+      height: 6px !important;
+      border-radius: 999px !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
       cursor: pointer;
+      background: linear-gradient(to right,
+        var(--accent-blue) 0%,
+        var(--accent-blue) var(--val, 50%),
+        rgba(255,255,255,0.08) var(--val, 50%),
+        rgba(255,255,255,0.08) 100%) !important;
+    }
+    body.light input[type="range"].proy-range {
+      background: linear-gradient(to right,
+        var(--accent-blue) 0%,
+        var(--accent-blue) var(--val, 50%),
+        rgba(0,0,0,0.08) var(--val, 50%),
+        rgba(0,0,0,0.08) 100%) !important;
+    }
+    input[type="range"].proy-range::-webkit-slider-runnable-track {
+      -webkit-appearance: none;
       background: transparent;
-      height: auto;
       border: none;
-      outline: none;
       box-shadow: none;
+      height: 6px;
+      border-radius: 999px;
     }
-    .proy-range::-webkit-slider-runnable-track {
-      border: none;
-      box-shadow: none;
-      outline: none;
+    input[type="range"].proy-range::-webkit-slider-thumb {
+      -webkit-appearance: none !important;
+      appearance: none !important;
+      width: 18px !important;
+      height: 18px !important;
+      border-radius: 50% !important;
+      background: var(--accent-blue) !important;
+      border: 2px solid var(--bg-card) !important;
+      box-shadow: 0 0 0 1px var(--accent-blue) !important;
+      margin-top: -6px;
+      cursor: pointer;
     }
-    .proy-range::-moz-range-track {
+    input[type="range"].proy-range::-moz-range-track {
+      background: rgba(255,255,255,0.08);
       border: none;
       box-shadow: none;
-      outline: none;
+      height: 6px;
+      border-radius: 999px;
     }
-    .proy-range::-webkit-slider-thumb {
-      -webkit-appearance: auto;
-      appearance: auto;
-      background: initial;
-      width: initial;
-      height: initial;
-      border: none;
-      box-shadow: none;
+    body.light input[type="range"].proy-range::-moz-range-track {
+      background: rgba(0,0,0,0.08);
+    }
+    input[type="range"].proy-range::-moz-range-progress {
+      background: var(--accent-blue);
+      height: 6px;
+      border-radius: 999px;
+    }
+    input[type="range"].proy-range::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      border: 2px solid var(--bg-card);
+      box-shadow: 0 0 0 1px var(--accent-blue);
+      cursor: pointer;
     }
     .proy-range-labels {
       display: flex;
@@ -4236,6 +4271,14 @@
       document.getElementById('proyMensualNum').textContent   = mensual.toLocaleString('es-ES');
       document.getElementById('proyRateNum').textContent      = ratePct % 1 === 0 ? ratePct : ratePct.toLocaleString('es-ES');
       document.getElementById('proyYearsNum').textContent     = years;
+
+      // Calcula y aplica el % de relleno azul de cada slider (Chrome/Safari)
+      ['proyCapital','proyMensual','proyRate','proyYears'].forEach(id => {
+        const el = document.getElementById(id);
+        const min = parseFloat(el.min), max = parseFloat(el.max), v = parseFloat(el.value);
+        const pct = max > min ? ((v - min) / (max - min)) * 100 : 0;
+        el.style.setProperty('--val', pct + '%');
+      });
 
       const r = ratePct / 100 / 12;
       const n = years * 12;
