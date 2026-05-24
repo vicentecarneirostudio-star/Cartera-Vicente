@@ -4310,12 +4310,11 @@
         const fvMen = r === 0 ? mensual * nm : mensual * (Math.pow(1 + r, nm) - 1) / r;
         const v = fvCap + fvMen;
         const inv = capital + (mensual * nm);
-        const pctGain = inv > 0 ? Math.round(((v - inv) / inv) * 100) : 0;
         return `
           <div class="proy-milestone">
             <div class="m-year">AÑO ${y}</div>
             <div class="m-value">${fmt(v, 0)}</div>
-            <div class="m-sub">+${pctGain}% vs invertido</div>
+            <div class="m-sub">Aportado ${fmt(inv, 0)}</div>
           </div>
         `;
       }).join('');
