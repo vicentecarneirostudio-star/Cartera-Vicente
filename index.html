@@ -541,58 +541,8 @@
     .proy-control-value.blue { color: var(--accent-blue); }
     .proy-range {
       width: 100%;
-      -webkit-appearance: none;
-      appearance: none;
-      height: 8px;
-      border-radius: 4px;
-      outline: none;
+      accent-color: var(--accent-blue);
       cursor: pointer;
-      /* Relleno azul antes del thumb (controlado via --val %) */
-      background: linear-gradient(to right,
-        var(--accent-blue) 0%,
-        var(--accent-blue) var(--val, 0%),
-        rgba(127,127,127,0.25) var(--val, 0%),
-        rgba(127,127,127,0.25) 100%);
-    }
-    /* Webkit: track transparente para que se vea el gradient del input */
-    .proy-range::-webkit-slider-runnable-track {
-      height: 8px;
-      border-radius: 4px;
-      background: transparent;
-      border: none;
-    }
-    .proy-range::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--accent-blue);
-      cursor: pointer;
-      border: 3px solid var(--bg-card);
-      box-shadow: 0 0 0 1px var(--accent-blue);
-      margin-top: -6px;
-    }
-    /* Firefox: track gris + progress azul */
-    .proy-range::-moz-range-track {
-      height: 8px;
-      border-radius: 4px;
-      background: rgba(127,127,127,0.25);
-      border: none;
-    }
-    .proy-range::-moz-range-progress {
-      height: 8px;
-      border-radius: 4px;
-      background: var(--accent-blue);
-    }
-    .proy-range::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--accent-blue);
-      cursor: pointer;
-      border: 3px solid var(--bg-card);
-      box-shadow: 0 0 0 1px var(--accent-blue);
     }
     .proy-range-labels {
       display: flex;
@@ -4259,14 +4209,6 @@
       document.getElementById('proyMensualNum').textContent   = mensual.toLocaleString('es-ES');
       document.getElementById('proyRateNum').textContent      = ratePct % 1 === 0 ? ratePct : ratePct.toLocaleString('es-ES');
       document.getElementById('proyYearsNum').textContent     = years;
-
-      // Actualiza el relleno azul de cada slider (--val)
-      ['proyCapital','proyMensual','proyRate','proyYears'].forEach(id => {
-        const el = document.getElementById(id);
-        const min = parseFloat(el.min), max = parseFloat(el.max), v = parseFloat(el.value);
-        const pct = max > min ? ((v - min) / (max - min)) * 100 : 0;
-        el.style.setProperty('--val', pct + '%');
-      });
 
       const r = ratePct / 100 / 12;
       const n = years * 12;
