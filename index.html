@@ -1941,7 +1941,7 @@
         <button class="currency-btn" id="btnUsd" onclick="setCurrency('USD')">USD $</button>
       </div>
       <button class="btn-theme" id="btnTheme" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
-      <span class="last-update">Actualizado: 3 may 2026</span>
+      <span class="last-update">Actualizado: 24 may 2026</span>
     </div>
   </nav>
 
@@ -2620,27 +2620,26 @@
        DATOS INICIALES DE POSICIONES
        ========================================================= */
     /* Versión de datos — al cambiar fuerza reset del localStorage */
-    const DATA_VERSION = '2026-05-03-v1';
+    const DATA_VERSION = '2026-05-24-v1';
 
     const INITIAL_POSITIONS = [
-      // TRADE REPUBLIC — ETFs (datos exactos de TR, 17 abr 2026)
-      { ticker: 'CNDX',   name: 'NASDAQ 100 USD (Acc)',              type: 'ETF',    broker: 'Trade Republic', value: 749.46, cost: 672.58, pnl_eur:  76.88, pnl_pct: 11.44  },
-      { ticker: 'ISPY',   name: 'Space Innovators USD (Acc)',         type: 'ETF',    broker: 'Trade Republic', value: 620.18, cost: 392.19, pnl_eur: 227.99, pnl_pct: 58.13  },
-      { ticker: 'SGLN',   name: 'Physical Gold USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 221.06, cost: 176.38, pnl_eur:  44.68, pnl_pct: 25.33  },
-      { ticker: 'VDAI',   name: 'AI & Big Data USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 174.50, cost: 150.00, pnl_eur:  24.50, pnl_pct: 16.33  },
-      { ticker: 'AIRO',   name: 'Artificial Intelligence & Robotics', type: 'ETF',    broker: 'Trade Republic', value: 160.73, cost: 140.00, pnl_eur:  20.73, pnl_pct: 14.81  },
-      { ticker: 'CXCN',   name: 'MSCI China Tech USD (Acc)',          type: 'ETF',    broker: 'Trade Republic', value: 116.88, cost: 120.00, pnl_eur:  -3.12, pnl_pct: -2.60  },
-      // TRADE REPUBLIC — Acciones (datos exactos de TR, 17 abr 2026)
-      { ticker: 'QBTS',   name: 'D-Wave Quantum',                     type: 'Acción', broker: 'Trade Republic', value: 445.12, cost: 335.01, pnl_eur: 110.11, pnl_pct: 32.87  },
-      { ticker: 'IREN',   name: 'IREN Limited',                       type: 'Acción', broker: 'Trade Republic', value: 213.38, cost: 175.24, pnl_eur:  38.14, pnl_pct: 21.76  },
-      { ticker: 'CRSP',   name: 'CRISPR Therapeutics',                type: 'Acción', broker: 'Trade Republic', value: 162.45, cost: 160.00, pnl_eur:   2.45, pnl_pct:  1.53  },
-      // TRADE REPUBLIC — Crypto (datos exactos de TR, 17 abr 2026)
-      { ticker: 'BTC-TR', name: 'Bitcoin (Trade Republic)',           type: 'Crypto', broker: 'Trade Republic', value: 463.46, cost: 564.29, pnl_eur: -100.83, pnl_pct: -17.86 },
-      // IBKR — Acciones (actualizado 3 may 2026: vendidas MU/MSFT/VST/AVGO, nuevas LLY/NBIS/OKLO)
-      { ticker: 'LLY',    name: 'Eli Lilly and Company',              type: 'Acción', broker: 'IBKR',           value: 400.49, cost: 367.12, pnl_eur:  33.37, pnl_pct:  9.09  },
-      { ticker: 'NBIS',   name: 'Nebius Group',                       type: 'Acción', broker: 'IBKR',           value: 236.78, cost: 206.74, pnl_eur:  30.04, pnl_pct: 14.53  },
-      { ticker: 'OKLO',   name: 'Oklo Inc.',                          type: 'Acción', broker: 'IBKR',           value: 234.21, cost: 215.93, pnl_eur:  18.28, pnl_pct:  8.46  },
-      // KRAKEN — Crypto (datos exactos de Kraken, 2 abr 2026)
+      // TRADE REPUBLIC — ETFs (datos exactos de TR, 24 may 2026)
+      { ticker: 'CNDX',   name: 'NASDAQ 100 USD (Acc)',              type: 'ETF',    broker: 'Trade Republic', value: 888.42, cost: 712.50, pnl_eur: 175.92, pnl_pct: 24.69  },
+      { ticker: 'ISPY',   name: 'Space Innovators USD (Acc)',         type: 'ETF',    broker: 'Trade Republic', value: 864.96, cost: 494.02, pnl_eur: 370.94, pnl_pct: 75.09  },
+      { ticker: 'VDAI',   name: 'AI & Big Data USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 219.38, cost: 160.00, pnl_eur:  59.38, pnl_pct: 37.11  },
+      { ticker: 'SGLN',   name: 'Physical Gold USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 218.80, cost: 187.71, pnl_eur:  31.09, pnl_pct: 16.56  },
+      { ticker: 'AIRO',   name: 'Artificial Intelligence & Robotics', type: 'ETF',    broker: 'Trade Republic', value: 184.87, cost: 150.00, pnl_eur:  34.87, pnl_pct: 23.25  },
+      { ticker: 'CXCN',   name: 'MSCI China Tech USD (Acc)',          type: 'ETF',    broker: 'Trade Republic', value: 138.66, cost: 140.00, pnl_eur:  -1.34, pnl_pct: -0.96  },
+      // TRADE REPUBLIC — Acciones (datos exactos de TR, 24 may 2026: IREN vendida, NOW nueva)
+      { ticker: 'QBTS',   name: 'D-Wave Quantum',                     type: 'Acción', broker: 'Trade Republic', value: 641.97, cost: 359.99, pnl_eur: 281.98, pnl_pct: 78.33  },
+      { ticker: 'NOW',    name: 'ServiceNow',                         type: 'Acción', broker: 'Trade Republic', value: 194.85, cost: 164.48, pnl_eur:  30.37, pnl_pct: 18.46  },
+      { ticker: 'CRSP',   name: 'CRISPR Therapeutics',                type: 'Acción', broker: 'Trade Republic', value: 157.34, cost: 170.00, pnl_eur: -12.66, pnl_pct: -7.45  },
+      // TRADE REPUBLIC — Crypto (datos exactos de TR, 24 may 2026)
+      { ticker: 'BTC-TR', name: 'Bitcoin (Trade Republic)',           type: 'Crypto', broker: 'Trade Republic', value: 499.52, cost: 591.34, pnl_eur: -91.82, pnl_pct: -15.51 },
+      // IBKR — Acciones (actualizado 24 may 2026: vendidas NBIS/OKLO, nueva AMPX)
+      { ticker: 'LLY',    name: 'Eli Lilly and Company',              type: 'Acción', broker: 'IBKR',           value: 447.18, cost: 370.33, pnl_eur:  76.85, pnl_pct: 20.70  },
+      { ticker: 'AMPX',   name: 'Amprius Technologies',               type: 'Acción', broker: 'IBKR',           value: 604.25, cost: 616.47, pnl_eur: -12.22, pnl_pct: -1.98  },
+      // KRAKEN — Crypto (sin cambios)
       { ticker: 'BTC-K',  name: 'Bitcoin (Kraken)',                   type: 'Crypto', broker: 'Kraken',         value: 250.73, cost: 339.83, pnl_eur: -89.11, pnl_pct: -26.22 },
     ];
 
@@ -2655,13 +2654,13 @@
 
     /* P&L por broker calculado desde capturas (en EUR) */
     const PNL_BROKERS = {
-      'Trade Republic': 441.53,  // actualizado 17 abr 2026
-      'IBKR':            81.56,  // actualizado 3 may 2026 (LLY+NBIS+OKLO)
+      'Trade Republic': 715.93,  // actualizado 24 may 2026 (beneficio desde inicio TR)
+      'IBKR':            62.06,  // actualizado 24 may 2026 (PyG no realizadas)
       'Kraken':         -89.11,  // sin cambios
     };
 
-    /* Tipo de cambio EUR → USD (3 may 2026, rate implícito IBKR) */
-    const EUR_USD = 1.172;
+    /* Tipo de cambio EUR → USD (24 may 2026, rate implícito IBKR) */
+    const EUR_USD = 1.162;
 
     /* =========================================================
        ESTADO DE LA APP
