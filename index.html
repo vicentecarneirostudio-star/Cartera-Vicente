@@ -548,6 +548,22 @@
       background: var(--bg-tertiary, var(--border));
       outline: none;
       cursor: pointer;
+      /* Relleno azul antes del thumb (controlado via --val %) */
+      background: linear-gradient(to right,
+        var(--accent-blue) 0%,
+        var(--accent-blue) var(--val, 0%),
+        var(--bg-tertiary, var(--border)) var(--val, 0%),
+        var(--bg-tertiary, var(--border)) 100%);
+    }
+    .proy-range::-webkit-slider-runnable-track {
+      height: 6px;
+      border-radius: 3px;
+      background: transparent;
+    }
+    .proy-range::-moz-range-track {
+      height: 6px;
+      border-radius: 3px;
+      background: transparent;
     }
     .proy-range::-webkit-slider-thumb {
       -webkit-appearance: none;
@@ -559,6 +575,7 @@
       cursor: pointer;
       border: 2px solid var(--bg-card);
       box-shadow: 0 0 0 1px var(--accent-blue);
+      margin-top: -6px;
     }
     .proy-range::-moz-range-thumb {
       width: 18px;
@@ -604,9 +621,12 @@
     }
     .proy-results {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: 1fr 1fr 1fr 1.6fr;
       gap: 16px;
       margin-bottom: 24px;
+    }
+    @media (max-width: 900px) {
+      .proy-results { grid-template-columns: 1fr 1fr; }
     }
     .proy-result-card {
       background: var(--bg-card);
@@ -614,6 +634,27 @@
       border-radius: 14px;
       padding: 20px;
     }
+    .proy-result-final {
+      border: 1.5px solid var(--accent-blue);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--accent-blue) 8%, var(--bg-card)) 0%, var(--bg-card) 100%);
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent-blue) 25%, transparent), 0 8px 28px color-mix(in srgb, var(--accent-blue) 15%, transparent);
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+    .proy-result-final .proy-result-amount { font-size: 40px; }
+    .proy-result-final .proy-result-label { color: var(--accent-blue); }
+    .proy-final-aporte {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 13px;
+    }
+    .proy-final-aporte .afp-label { color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; font-size: 11px; font-weight: 600; }
+    .proy-final-aporte .afp-value { color: var(--text-primary); font-weight: 700; font-variant-numeric: tabular-nums; }
     .proy-result-label {
       font-size: 12px;
       font-weight: 600;
@@ -4110,8 +4151,8 @@
       const capitalDefault = Math.round(capitalReal / 500) * 500 || 5500;
       document.getElementById('proyeccionContainer').innerHTML = `
         <div style="margin-bottom:20px;">
-          <h2 style="font-size:24px; font-weight:700; color:var(--text-primary); margin:0 0 4px 0;">📈 Proyección de Cartera</h2>
-          <p style="font-size:13px; color:var(--text-muted); margin:0;">Capital inicial: <span style="color:var(--text-secondary); font-weight:600;">${fmt(capitalReal, 2)}</span> · Basado en tu cartera actual</p>
+          <h2 style="font-size:24px; font-weight:700; color:var(--text-primary); margin:0 0 4px 0;">Proyección de Cartera</h2>
+          <p style="font-size:13px; color:var(--text-muted); margin:0;">Basado en tu cartera actual</p>
         </div>
 
         <!-- ESCENARIOS RÁPIDOS -->
@@ -4133,7 +4174,7 @@
           <div class="proy-control-card">
             <div class="proy-control-label">Aportación mensual (€)</div>
             <div class="proy-control-value blue"><span id="proyMensualNum">300</span> €/mes</div>
-            <input type="range" id="proyMensual" class="proy-range" min="0" max="2000" step="50" value="300" oninput="updateProyeccion()">
+            <input type="range" id="proyMensual" class="proy-range" min="0" max="2000" step="10" value="300" oninput="updateProyeccion()">
             <div class="proy-range-labels"><span>0€</span><span>2.000€</span></div>
           </div>
           <div class="proy-control-card">
@@ -4145,18 +4186,13 @@
           <div class="proy-control-card">
             <div class="proy-control-label">Horizonte temporal</div>
             <div class="proy-control-value blue"><span id="proyYearsNum">20</span> años</div>
-            <input type="range" id="proyYears" class="proy-range" min="1" max="40" step="1" value="20" oninput="updateProyeccion()">
-            <div class="proy-range-labels"><span>1 año</span><span>40 años</span></div>
+            <input type="range" id="proyYears" class="proy-range" min="1" max="30" step="1" value="20" oninput="updateProyeccion()">
+            <div class="proy-range-labels"><span>1 año</span><span>30 años</span></div>
           </div>
         </div>
 
         <!-- RESULTADOS -->
         <div class="proy-results">
-          <div class="proy-result-card">
-            <div class="proy-result-label">VALOR FINAL</div>
-            <div class="proy-result-amount blue" id="proyFinal">—</div>
-            <div class="proy-result-sub" id="proyFinalSub">—</div>
-          </div>
           <div class="proy-result-card">
             <div class="proy-result-label">GANANCIA TOTAL</div>
             <div class="proy-result-amount green" id="proyGanancia">—</div>
@@ -4171,6 +4207,15 @@
             <div class="proy-result-label">INTERESES GENERADOS</div>
             <div class="proy-result-amount amber" id="proyInteres">—</div>
             <div class="proy-result-sub">magia del interés compuesto</div>
+          </div>
+          <div class="proy-result-card proy-result-final">
+            <div class="proy-result-label">VALOR FINAL</div>
+            <div class="proy-result-amount blue" id="proyFinal">—</div>
+            <div class="proy-result-sub" id="proyFinalSub">—</div>
+            <div class="proy-final-aporte">
+              <span class="afp-label">Has aportado</span>
+              <span class="afp-value" id="proyFinalAporte">—</span>
+            </div>
           </div>
         </div>
 
@@ -4206,6 +4251,14 @@
       document.getElementById('proyRateNum').textContent      = ratePct % 1 === 0 ? ratePct : ratePct.toLocaleString('es-ES');
       document.getElementById('proyYearsNum').textContent     = years;
 
+      // Actualiza el relleno azul de cada slider (--val)
+      ['proyCapital','proyMensual','proyRate','proyYears'].forEach(id => {
+        const el = document.getElementById(id);
+        const min = parseFloat(el.min), max = parseFloat(el.max), v = parseFloat(el.value);
+        const pct = max > min ? ((v - min) / (max - min)) * 100 : 0;
+        el.style.setProperty('--val', pct + '%');
+      });
+
       const r = ratePct / 100 / 12;
       const n = years * 12;
 
@@ -4226,6 +4279,7 @@
       document.getElementById('proyGananciaSub').textContent = `×${multiplicador} tu inversión`;
       document.getElementById('proyInvertido').textContent = fmt(invertido, 0);
       document.getElementById('proyInteres').textContent = fmt(interes, 0);
+      document.getElementById('proyFinalAporte').textContent = fmt(invertido, 0);
 
       // Hitos: 1, 3, 5, 10, 15, 20, 25, 30 (los que entren en el horizonte)
       const hitos = [1, 3, 5, 10, 15, 20, 25, 30].filter(y => y <= years);
