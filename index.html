@@ -4360,37 +4360,60 @@
         dataInvertido.push(capital + mensual * nm);
       }
       const fmtK = v => (v >= 1000 ? Math.round(v/1000) + 'K €' : Math.round(v) + ' €');
+      const fmtKShort = v => (v >= 1000 ? Math.round(v/1000) + 'K' : Math.round(v));
+      const barLabelPlugin = {
+        id: 'barLabel',
+        afterDatasetsDraw(chart) {
+          const { ctx } = chart;
+          const meta = chart.getDatasetMeta(0);
+          if (!meta || meta.hidden) return;
+          ctx.save();
+          ctx.fillStyle = '#e2e8f0';
+          ctx.font = '600 10px system-ui, -apple-system, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          meta.data.forEach((bar, i) => {
+            const val = chart.data.datasets[0].data[i];
+            ctx.fillText(fmtKShort(val), bar.x, bar.y - 4);
+          });
+          ctx.restore();
+        }
+      };
       const cfg = {
-        type: 'line',
+        type: 'bar',
         data: {
           labels,
           datasets: [
             {
+              type: 'bar',
               label: 'Valor con interés compuesto',
               data: dataValor,
+              backgroundColor: 'rgba(59,130,246,0.55)',
               borderColor: '#3b82f6',
-              backgroundColor: 'rgba(59,130,246,0.08)',
-              borderWidth: 2,
-              fill: true,
-              tension: 0.3,
-              pointRadius: 3,
-              pointBackgroundColor: '#3b82f6'
+              borderWidth: 1,
+              borderRadius: 4,
+              categoryPercentage: 0.9,
+              barPercentage: 0.85,
+              order: 2
             },
             {
+              type: 'line',
               label: 'Capital invertido (sin rentabilidad)',
               data: dataInvertido,
-              borderColor: '#facc15',
+              borderColor: '#fb923c',
               borderDash: [6, 6],
               borderWidth: 1.5,
               fill: false,
               tension: 0,
-              pointRadius: 0
+              pointRadius: 0,
+              order: 1
             }
           ]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          layout: { padding: { top: 22 } },
           plugins: {
             legend: {
               position: 'top',
@@ -4416,7 +4439,8 @@
               grid: { color: 'rgba(148,163,184,0.08)' }
             }
           }
-        }
+        },
+        plugins: [barLabelPlugin]
       };
       if (_proyChart) {
         _proyChart.data = cfg.data;
