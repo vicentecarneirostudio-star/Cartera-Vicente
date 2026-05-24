@@ -731,14 +731,18 @@
     .proy-milestone .m-value {
       font-size: 18px;
       font-weight: 700;
-      color: var(--text-primary);
+      color: var(--accent-green);
       margin-bottom: 4px;
       line-height: 1.1;
     }
     .proy-milestone .m-sub {
       font-size: 11px;
-      color: var(--accent-green);
+      color: var(--text-primary);
       font-weight: 600;
+    }
+    .proy-milestone.active {
+      border: 1.5px solid var(--accent-blue);
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent-blue) 25%, transparent), 0 6px 18px color-mix(in srgb, var(--accent-blue) 15%, transparent);
     }
     .proy-breakdown {
       background: var(--bg-card);
@@ -4310,8 +4314,9 @@
         const fvMen = r === 0 ? mensual * nm : mensual * (Math.pow(1 + r, nm) - 1) / r;
         const v = fvCap + fvMen;
         const inv = capital + (mensual * nm);
+        const isActive = y === years;
         return `
-          <div class="proy-milestone">
+          <div class="proy-milestone${isActive ? ' active' : ''}">
             <div class="m-year">AÑO ${y}</div>
             <div class="m-value">${fmt(v, 0)}</div>
             <div class="m-sub">Aportado ${fmt(inv, 0)}</div>
