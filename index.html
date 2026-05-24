@@ -532,12 +532,13 @@
       margin-bottom: 8px;
     }
     .proy-control-value {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 700;
       color: var(--text-primary);
       margin-bottom: 12px;
       line-height: 1.1;
     }
+    .proy-control-value.blue { color: var(--accent-blue); }
     .proy-range {
       width: 100%;
       -webkit-appearance: none;
@@ -647,7 +648,7 @@
     }
     .proy-milestones {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 12px;
       margin-bottom: 24px;
     }
@@ -655,20 +656,27 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 14px 16px;
+      padding: 16px 14px;
       text-align: center;
     }
     .proy-milestone .m-year {
       font-size: 11px;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 6px;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
     }
     .proy-milestone .m-value {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
       color: var(--text-primary);
+      margin-bottom: 4px;
+      line-height: 1.1;
+    }
+    .proy-milestone .m-sub {
+      font-size: 11px;
+      color: var(--accent-green);
+      font-weight: 600;
     }
     .proy-breakdown {
       background: var(--bg-card);
@@ -678,23 +686,21 @@
     }
     .proy-breakdown-row {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-columns: 1fr auto;
       gap: 12px;
-      padding: 12px 18px;
+      padding: 14px 22px;
       border-bottom: 1px solid var(--border);
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text-secondary);
+      align-items: center;
     }
     .proy-breakdown-row:last-child { border-bottom: none; }
-    .proy-breakdown-row.header {
-      font-size: 11px;
+    .proy-breakdown-row .b-cell-right {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-primary);
       font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      background: var(--bg-tertiary, transparent);
     }
-    .proy-breakdown-row .b-cell-right { text-align: right; font-variant-numeric: tabular-nums; }
 
     /* =========================================================
        WATCHLIST — estilos de tabla
@@ -4100,44 +4106,45 @@
     let proyChart = null;
 
     function renderProyeccion() {
-      const capitalInicial = Math.round(getTotalValue());
+      const capitalReal = getTotalValue();
+      const capitalDefault = Math.round(capitalReal / 500) * 500 || 5500;
       document.getElementById('proyeccionContainer').innerHTML = `
-        <div style="margin-bottom:24px;">
-          <h2 style="font-size:24px; font-weight:700; color:var(--text-primary); margin:0 0 6px 0;">Proyección de patrimonio</h2>
-          <p style="font-size:13px; color:var(--text-muted); margin:0;">Simulación de interés compuesto con aportaciones mensuales</p>
+        <div style="margin-bottom:20px;">
+          <h2 style="font-size:24px; font-weight:700; color:var(--text-primary); margin:0 0 4px 0;">📈 Proyección de Cartera</h2>
+          <p style="font-size:13px; color:var(--text-muted); margin:0;">Capital inicial: <span style="color:var(--text-secondary); font-weight:600;">${fmt(capitalReal, 2)}</span> · Basado en tu cartera actual</p>
         </div>
 
         <!-- ESCENARIOS RÁPIDOS -->
         <div class="proy-scenarios">
-          <button class="proy-scenario-btn" onclick="setProyScenario(5, this)">Conservador · 5%</button>
-          <button class="proy-scenario-btn active" onclick="setProyScenario(8, this)">Moderado · 8%</button>
-          <button class="proy-scenario-btn" onclick="setProyScenario(12, this)">Optimista · 12%</button>
-          <button class="proy-scenario-btn" onclick="setProyScenario(15, this)">Agresivo · 15%</button>
+          <button class="proy-scenario-btn" onclick="setProyScenario(5, this)">🐢 Conservador (5%)</button>
+          <button class="proy-scenario-btn active" onclick="setProyScenario(8, this)">🏆 Moderado (8%)</button>
+          <button class="proy-scenario-btn" onclick="setProyScenario(12, this)">🚀 Optimista (12%)</button>
+          <button class="proy-scenario-btn" onclick="setProyScenario(15, this)">🔥 Agresivo (15%)</button>
         </div>
 
         <!-- CONTROLES -->
         <div class="proy-controls">
           <div class="proy-control-card">
-            <div class="proy-control-label">Capital inicial</div>
-            <div class="proy-control-value" id="proyCapitalLabel">${fmt(capitalInicial, 0)}</div>
-            <input type="range" id="proyCapital" class="proy-range" min="0" max="100000" step="100" value="${capitalInicial}" oninput="updateProyeccion()">
-            <div class="proy-range-labels"><span>0&nbsp;€</span><span>100.000&nbsp;€</span></div>
+            <div class="proy-control-label">Capital inicial (€)</div>
+            <div class="proy-control-value blue" id="proyCapitalLabel">${fmt(capitalDefault, 0)}</div>
+            <input type="range" id="proyCapital" class="proy-range" min="1000" max="50000" step="500" value="${capitalDefault}" oninput="updateProyeccion()">
+            <div class="proy-range-labels"><span>1.000€</span><span>50.000€</span></div>
           </div>
           <div class="proy-control-card">
-            <div class="proy-control-label">Aportación mensual</div>
-            <div class="proy-control-value" id="proyMensualLabel">${fmt(200, 0)}</div>
-            <input type="range" id="proyMensual" class="proy-range" min="0" max="2000" step="10" value="200" oninput="updateProyeccion()">
-            <div class="proy-range-labels"><span>0&nbsp;€</span><span>2.000&nbsp;€</span></div>
+            <div class="proy-control-label">Aportación mensual (€)</div>
+            <div class="proy-control-value blue"><span id="proyMensualNum">300</span> €/mes</div>
+            <input type="range" id="proyMensual" class="proy-range" min="0" max="2000" step="50" value="300" oninput="updateProyeccion()">
+            <div class="proy-range-labels"><span>0€</span><span>2.000€</span></div>
           </div>
           <div class="proy-control-card">
-            <div class="proy-control-label">Rentabilidad anual</div>
-            <div class="proy-control-value" id="proyRateLabel">8,00%</div>
-            <input type="range" id="proyRate" class="proy-range" min="1" max="25" step="0.1" value="8" oninput="updateProyeccion()">
+            <div class="proy-control-label">Rentabilidad anual (%)</div>
+            <div class="proy-control-value blue"><span id="proyRateNum">8</span>%</div>
+            <input type="range" id="proyRate" class="proy-range" min="1" max="25" step="0.5" value="8" oninput="updateProyeccion()">
             <div class="proy-range-labels"><span>1%</span><span>25%</span></div>
           </div>
           <div class="proy-control-card">
             <div class="proy-control-label">Horizonte temporal</div>
-            <div class="proy-control-value" id="proyYearsLabel">20 años</div>
+            <div class="proy-control-value blue"><span id="proyYearsNum">20</span> años</div>
             <input type="range" id="proyYears" class="proy-range" min="1" max="40" step="1" value="20" oninput="updateProyeccion()">
             <div class="proy-range-labels"><span>1 año</span><span>40 años</span></div>
           </div>
@@ -4146,38 +4153,32 @@
         <!-- RESULTADOS -->
         <div class="proy-results">
           <div class="proy-result-card">
-            <div class="proy-result-label">Valor final</div>
+            <div class="proy-result-label">VALOR FINAL</div>
             <div class="proy-result-amount blue" id="proyFinal">—</div>
             <div class="proy-result-sub" id="proyFinalSub">—</div>
           </div>
           <div class="proy-result-card">
-            <div class="proy-result-label">Ganancia total</div>
+            <div class="proy-result-label">GANANCIA TOTAL</div>
             <div class="proy-result-amount green" id="proyGanancia">—</div>
             <div class="proy-result-sub" id="proyGananciaSub">—</div>
           </div>
           <div class="proy-result-card">
-            <div class="proy-result-label">Capital invertido</div>
-            <div class="proy-result-amount amber" id="proyInvertido">—</div>
-            <div class="proy-result-sub" id="proyInvertidoSub">—</div>
+            <div class="proy-result-label">CAPITAL INVERTIDO</div>
+            <div class="proy-result-amount purple" id="proyInvertido">—</div>
+            <div class="proy-result-sub">inicial + aportaciones</div>
           </div>
           <div class="proy-result-card">
-            <div class="proy-result-label">Interés compuesto</div>
-            <div class="proy-result-amount purple" id="proyInteres">—</div>
-            <div class="proy-result-sub" id="proyInteresSub">—</div>
+            <div class="proy-result-label">INTERESES GENERADOS</div>
+            <div class="proy-result-amount amber" id="proyInteres">—</div>
+            <div class="proy-result-sub">magia del interés compuesto</div>
           </div>
-        </div>
-
-        <!-- GRÁFICO -->
-        <div class="proy-chart-wrap">
-          <canvas id="proyChartCanvas"></canvas>
         </div>
 
         <!-- HITOS -->
-        <div style="font-size:13px; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;">Hitos clave</div>
         <div class="proy-milestones" id="proyMilestones"></div>
 
         <!-- DESGLOSE -->
-        <div style="font-size:13px; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;">Desglose anual</div>
+        <div style="font-size:13px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px;">Desglose</div>
         <div class="proy-breakdown" id="proyBreakdown"></div>
       `;
       updateProyeccion();
@@ -4199,145 +4200,61 @@
       const ratePct = parseFloat(document.getElementById('proyRate').value);
       const years   = parseInt(document.getElementById('proyYears').value, 10);
 
-      // Etiquetas
+      // Etiquetas de los sliders
       document.getElementById('proyCapitalLabel').textContent = fmt(capital, 0);
-      document.getElementById('proyMensualLabel').textContent = fmt(mensual, 0);
-      document.getElementById('proyRateLabel').textContent    = ratePct.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
-      document.getElementById('proyYearsLabel').textContent   = years + (years === 1 ? ' año' : ' años');
+      document.getElementById('proyMensualNum').textContent   = mensual.toLocaleString('es-ES');
+      document.getElementById('proyRateNum').textContent      = ratePct % 1 === 0 ? ratePct : ratePct.toLocaleString('es-ES');
+      document.getElementById('proyYearsNum').textContent     = years;
 
       const r = ratePct / 100 / 12;
       const n = years * 12;
 
-      // Fórmula valor futuro (con aportaciones mensuales)
+      // Fórmula valor futuro
       const fvCapital  = capital * Math.pow(1 + r, n);
       const fvMensual  = r === 0 ? mensual * n : mensual * (Math.pow(1 + r, n) - 1) / r;
       const valorFinal = fvCapital + fvMensual;
-      const invertido  = capital + (mensual * n);
+      const totalAportado = mensual * n;
+      const invertido  = capital + totalAportado;
       const ganancia   = valorFinal - invertido;
-      const interes    = ganancia; // alias
+      const interes    = ganancia;
 
       // Resultados
       document.getElementById('proyFinal').textContent = fmt(valorFinal, 0);
-      document.getElementById('proyFinalSub').textContent = `Tras ${years} ${years === 1 ? 'año' : 'años'} al ${ratePct.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
+      document.getElementById('proyFinalSub').textContent = `en ${years} ${years === 1 ? 'año' : 'años'}`;
       document.getElementById('proyGanancia').textContent = fmt(ganancia, 0);
       const multiplicador = invertido > 0 ? (valorFinal / invertido).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—';
-      document.getElementById('proyGananciaSub').textContent = `×${multiplicador} sobre lo invertido`;
+      document.getElementById('proyGananciaSub').textContent = `×${multiplicador} tu inversión`;
       document.getElementById('proyInvertido').textContent = fmt(invertido, 0);
-      document.getElementById('proyInvertidoSub').textContent = `${fmt(capital, 0)} inicial + ${fmt(mensual * n, 0)} aportes`;
       document.getElementById('proyInteres').textContent = fmt(interes, 0);
-      const pctInteres = invertido > 0 ? ((interes / invertido) * 100).toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : '—';
-      document.getElementById('proyInteresSub').textContent = `${pctInteres}% del capital`;
 
-      // Gráfico
-      const labels = [];
-      const dataValor = [];
-      const dataInvertido = [];
-      for (let y = 0; y <= years; y++) {
-        const nm = y * 12;
-        const fvCap = capital * Math.pow(1 + r, nm);
-        const fvMen = r === 0 ? mensual * nm : mensual * (Math.pow(1 + r, nm) - 1) / r;
-        const inv = capital + (mensual * nm);
-        labels.push('Año ' + y);
-        dataValor.push(fvCap + fvMen);
-        dataInvertido.push(inv);
-      }
-
-      const styles = getComputedStyle(document.documentElement);
-      const colBlue  = (styles.getPropertyValue('--accent-blue')  || '#3b82f6').trim();
-      const colMuted = (styles.getPropertyValue('--text-muted')   || '#9ca3af').trim();
-      const colText  = (styles.getPropertyValue('--text-secondary')|| '#cbd5e1').trim();
-      const colBorder= (styles.getPropertyValue('--border')       || 'rgba(255,255,255,0.08)').trim();
-
-      const ctx = document.getElementById('proyChartCanvas').getContext('2d');
-      if (proyChart) proyChart.destroy();
-      proyChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Valor con interés compuesto',
-              data: dataValor,
-              borderColor: colBlue,
-              backgroundColor: colBlue + '22',
-              fill: true,
-              tension: 0.25,
-              borderWidth: 2,
-              pointRadius: 0,
-              pointHoverRadius: 4,
-            },
-            {
-              label: 'Capital invertido',
-              data: dataInvertido,
-              borderColor: colMuted,
-              backgroundColor: 'transparent',
-              borderDash: [6, 4],
-              fill: false,
-              tension: 0,
-              borderWidth: 2,
-              pointRadius: 0,
-              pointHoverRadius: 4,
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { mode: 'index', intersect: false },
-          plugins: {
-            legend: { labels: { color: colText, font: { family: 'Host Grotesk' } } },
-            tooltip: {
-              callbacks: { label: (ctx) => ctx.dataset.label + ': ' + fmt(ctx.parsed.y, 0) }
-            }
-          },
-          scales: {
-            x: { ticks: { color: colMuted }, grid: { color: colBorder } },
-            y: { ticks: { color: colMuted, callback: (v) => fmt(v, 0) }, grid: { color: colBorder } }
-          }
-        }
-      });
-
-      // Hitos
+      // Hitos: 1, 3, 5, 10, 15, 20, 25, 30 (los que entren en el horizonte)
       const hitos = [1, 3, 5, 10, 15, 20, 25, 30].filter(y => y <= years);
       document.getElementById('proyMilestones').innerHTML = hitos.map(y => {
         const nm = y * 12;
         const fvCap = capital * Math.pow(1 + r, nm);
         const fvMen = r === 0 ? mensual * nm : mensual * (Math.pow(1 + r, nm) - 1) / r;
         const v = fvCap + fvMen;
+        const inv = capital + (mensual * nm);
+        const pctGain = inv > 0 ? Math.round(((v - inv) / inv) * 100) : 0;
         return `
           <div class="proy-milestone">
-            <div class="m-year">Año ${y}</div>
+            <div class="m-year">AÑO ${y}</div>
             <div class="m-value">${fmt(v, 0)}</div>
+            <div class="m-sub">+${pctGain}% vs invertido</div>
           </div>
         `;
       }).join('');
 
-      // Desglose anual
-      let breakdownHtml = `
-        <div class="proy-breakdown-row header">
-          <div>Año</div>
-          <div class="b-cell-right">Invertido</div>
-          <div class="b-cell-right">Valor</div>
-          <div class="b-cell-right">Ganancia</div>
-        </div>
+      // Desglose (lista vertical)
+      const pctIntereses = valorFinal > 0 ? ((interes / valorFinal) * 100).toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : '—';
+      document.getElementById('proyBreakdown').innerHTML = `
+        <div class="proy-breakdown-row"><div>Capital inicial</div><div class="b-cell-right">${fmt(capital, 0)}</div></div>
+        <div class="proy-breakdown-row"><div>Total aportado (sin inicial)</div><div class="b-cell-right">${fmt(totalAportado, 0)}</div></div>
+        <div class="proy-breakdown-row"><div>Total invertido</div><div class="b-cell-right">${fmt(invertido, 0)}</div></div>
+        <div class="proy-breakdown-row"><div>Interés compuesto generado</div><div class="b-cell-right" style="color:var(--accent-green); font-weight:600;">${fmt(interes, 0)}</div></div>
+        <div class="proy-breakdown-row"><div>Valor final</div><div class="b-cell-right" style="color:var(--accent-blue); font-weight:700;">${fmt(valorFinal, 0)}</div></div>
+        <div class="proy-breakdown-row"><div>% que son intereses</div><div class="b-cell-right" style="color:var(--accent-amber); font-weight:600;">${pctIntereses}%</div></div>
       `;
-      for (let y = 1; y <= years; y++) {
-        const nm = y * 12;
-        const fvCap = capital * Math.pow(1 + r, nm);
-        const fvMen = r === 0 ? mensual * nm : mensual * (Math.pow(1 + r, nm) - 1) / r;
-        const v = fvCap + fvMen;
-        const inv = capital + (mensual * nm);
-        const gan = v - inv;
-        breakdownHtml += `
-          <div class="proy-breakdown-row">
-            <div>Año ${y}</div>
-            <div class="b-cell-right">${fmt(inv, 0)}</div>
-            <div class="b-cell-right" style="color:var(--text-primary); font-weight:600;">${fmt(v, 0)}</div>
-            <div class="b-cell-right" style="color:var(--accent-green);">${fmt(gan, 0)}</div>
-          </div>
-        `;
-      }
-      document.getElementById('proyBreakdown').innerHTML = breakdownHtml;
     }
 
     /* =========================================================
