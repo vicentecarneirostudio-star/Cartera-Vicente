@@ -507,6 +507,196 @@
     body.light .tesis-overlay { background: var(--bg-primary); }
 
     /* =========================================================
+       PROYECCIÓN — calculadora interés compuesto
+       ========================================================= */
+    .proy-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .proy-control-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      transition: border-color 0.2s;
+    }
+    .proy-control-card:hover { border-color: var(--border-hover); }
+    .proy-control-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .proy-control-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+    .proy-range {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--bg-tertiary, var(--border));
+      outline: none;
+      cursor: pointer;
+    }
+    .proy-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      cursor: pointer;
+      border: 2px solid var(--bg-card);
+      box-shadow: 0 0 0 1px var(--accent-blue);
+    }
+    .proy-range::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      cursor: pointer;
+      border: 2px solid var(--bg-card);
+    }
+    .proy-range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    .proy-scenarios {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .proy-scenario-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+      font-family: inherit;
+    }
+    .proy-scenario-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+    .proy-scenario-btn.active {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: #fff;
+    }
+    .proy-results {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .proy-result-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .proy-result-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+    .proy-result-amount {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+    .proy-result-amount.blue   { color: var(--accent-blue); }
+    .proy-result-amount.green  { color: var(--accent-green); }
+    .proy-result-amount.amber  { color: var(--accent-amber); }
+    .proy-result-amount.purple { color: var(--accent-purple); }
+    .proy-result-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .proy-chart-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      height: 320px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .proy-milestones {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .proy-milestone {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .proy-milestone .m-year {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+    .proy-milestone .m-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .proy-breakdown {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .proy-breakdown-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 12px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .proy-breakdown-row:last-child { border-bottom: none; }
+    .proy-breakdown-row.header {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: var(--bg-tertiary, transparent);
+    }
+    .proy-breakdown-row .b-cell-right { text-align: right; font-variant-numeric: tabular-nums; }
+
+    /* =========================================================
        WATCHLIST — estilos de tabla
        ========================================================= */
     .watch-row {
@@ -1923,6 +2113,7 @@
       <button class="nav-tab active" id="tab-cartera" onclick="switchPage('cartera')">Cartera</button>
       <button class="nav-tab" id="tab-horizonte" onclick="switchPage('horizonte')">Horizonte</button>
       <button class="nav-tab" id="tab-seguimiento" onclick="switchPage('seguimiento')">Seguimiento</button>
+      <button class="nav-tab" id="tab-proyeccion" onclick="switchPage('proyeccion')">Proyección</button>
     </div>
 
     <div class="navbar-right">
@@ -2435,6 +2626,15 @@
 
       </div><!-- /grid -->
 
+    </div>
+  </div>
+
+  <!-- =========================================================
+       PÁGINA — PROYECCIÓN (interés compuesto)
+       ========================================================= -->
+  <div id="page-proyeccion" class="page">
+    <div class="main-container" id="proyeccionContainer">
+      <!-- Generado por JS -->
     </div>
   </div>
 
@@ -3435,6 +3635,7 @@
       document.getElementById('tab-' + page).classList.add('active');
       if (page === 'horizonte') renderHorizonte();
       if (page === 'seguimiento') renderWatchlist();
+      if (page === 'proyeccion') renderProyeccion();
     }
 
     /* =========================================================
@@ -3891,6 +4092,252 @@
           ${blockHtml('Corto Plazo', 'badge-corto', corto, cortoTotal, cortoPnl, 'var(--accent-blue)')}
         </div>
       `;
+    }
+
+    /* =========================================================
+       PROYECCIÓN — calculadora interés compuesto
+       ========================================================= */
+    let proyChart = null;
+
+    function renderProyeccion() {
+      const capitalInicial = Math.round(getTotalValue());
+      document.getElementById('proyeccionContainer').innerHTML = `
+        <div style="margin-bottom:24px;">
+          <h2 style="font-size:24px; font-weight:700; color:var(--text-primary); margin:0 0 6px 0;">Proyección de patrimonio</h2>
+          <p style="font-size:13px; color:var(--text-muted); margin:0;">Simulación de interés compuesto con aportaciones mensuales</p>
+        </div>
+
+        <!-- ESCENARIOS RÁPIDOS -->
+        <div class="proy-scenarios">
+          <button class="proy-scenario-btn" onclick="setProyScenario(5, this)">Conservador · 5%</button>
+          <button class="proy-scenario-btn active" onclick="setProyScenario(8, this)">Moderado · 8%</button>
+          <button class="proy-scenario-btn" onclick="setProyScenario(12, this)">Optimista · 12%</button>
+          <button class="proy-scenario-btn" onclick="setProyScenario(15, this)">Agresivo · 15%</button>
+        </div>
+
+        <!-- CONTROLES -->
+        <div class="proy-controls">
+          <div class="proy-control-card">
+            <div class="proy-control-label">Capital inicial</div>
+            <div class="proy-control-value" id="proyCapitalLabel">${fmt(capitalInicial, 0)}</div>
+            <input type="range" id="proyCapital" class="proy-range" min="0" max="100000" step="100" value="${capitalInicial}" oninput="updateProyeccion()">
+            <div class="proy-range-labels"><span>0&nbsp;€</span><span>100.000&nbsp;€</span></div>
+          </div>
+          <div class="proy-control-card">
+            <div class="proy-control-label">Aportación mensual</div>
+            <div class="proy-control-value" id="proyMensualLabel">${fmt(200, 0)}</div>
+            <input type="range" id="proyMensual" class="proy-range" min="0" max="2000" step="10" value="200" oninput="updateProyeccion()">
+            <div class="proy-range-labels"><span>0&nbsp;€</span><span>2.000&nbsp;€</span></div>
+          </div>
+          <div class="proy-control-card">
+            <div class="proy-control-label">Rentabilidad anual</div>
+            <div class="proy-control-value" id="proyRateLabel">8,00%</div>
+            <input type="range" id="proyRate" class="proy-range" min="1" max="25" step="0.1" value="8" oninput="updateProyeccion()">
+            <div class="proy-range-labels"><span>1%</span><span>25%</span></div>
+          </div>
+          <div class="proy-control-card">
+            <div class="proy-control-label">Horizonte temporal</div>
+            <div class="proy-control-value" id="proyYearsLabel">20 años</div>
+            <input type="range" id="proyYears" class="proy-range" min="1" max="40" step="1" value="20" oninput="updateProyeccion()">
+            <div class="proy-range-labels"><span>1 año</span><span>40 años</span></div>
+          </div>
+        </div>
+
+        <!-- RESULTADOS -->
+        <div class="proy-results">
+          <div class="proy-result-card">
+            <div class="proy-result-label">Valor final</div>
+            <div class="proy-result-amount blue" id="proyFinal">—</div>
+            <div class="proy-result-sub" id="proyFinalSub">—</div>
+          </div>
+          <div class="proy-result-card">
+            <div class="proy-result-label">Ganancia total</div>
+            <div class="proy-result-amount green" id="proyGanancia">—</div>
+            <div class="proy-result-sub" id="proyGananciaSub">—</div>
+          </div>
+          <div class="proy-result-card">
+            <div class="proy-result-label">Capital invertido</div>
+            <div class="proy-result-amount amber" id="proyInvertido">—</div>
+            <div class="proy-result-sub" id="proyInvertidoSub">—</div>
+          </div>
+          <div class="proy-result-card">
+            <div class="proy-result-label">Interés compuesto</div>
+            <div class="proy-result-amount purple" id="proyInteres">—</div>
+            <div class="proy-result-sub" id="proyInteresSub">—</div>
+          </div>
+        </div>
+
+        <!-- GRÁFICO -->
+        <div class="proy-chart-wrap">
+          <canvas id="proyChartCanvas"></canvas>
+        </div>
+
+        <!-- HITOS -->
+        <div style="font-size:13px; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;">Hitos clave</div>
+        <div class="proy-milestones" id="proyMilestones"></div>
+
+        <!-- DESGLOSE -->
+        <div style="font-size:13px; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;">Desglose anual</div>
+        <div class="proy-breakdown" id="proyBreakdown"></div>
+      `;
+      updateProyeccion();
+    }
+
+    function setProyScenario(rate, btn) {
+      document.querySelectorAll('.proy-scenario-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const rateInput = document.getElementById('proyRate');
+      if (rateInput) {
+        rateInput.value = rate;
+        updateProyeccion();
+      }
+    }
+
+    function updateProyeccion() {
+      const capital = parseFloat(document.getElementById('proyCapital').value);
+      const mensual = parseFloat(document.getElementById('proyMensual').value);
+      const ratePct = parseFloat(document.getElementById('proyRate').value);
+      const years   = parseInt(document.getElementById('proyYears').value, 10);
+
+      // Etiquetas
+      document.getElementById('proyCapitalLabel').textContent = fmt(capital, 0);
+      document.getElementById('proyMensualLabel').textContent = fmt(mensual, 0);
+      document.getElementById('proyRateLabel').textContent    = ratePct.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+      document.getElementById('proyYearsLabel').textContent   = years + (years === 1 ? ' año' : ' años');
+
+      const r = ratePct / 100 / 12;
+      const n = years * 12;
+
+      // Fórmula valor futuro (con aportaciones mensuales)
+      const fvCapital  = capital * Math.pow(1 + r, n);
+      const fvMensual  = r === 0 ? mensual * n : mensual * (Math.pow(1 + r, n) - 1) / r;
+      const valorFinal = fvCapital + fvMensual;
+      const invertido  = capital + (mensual * n);
+      const ganancia   = valorFinal - invertido;
+      const interes    = ganancia; // alias
+
+      // Resultados
+      document.getElementById('proyFinal').textContent = fmt(valorFinal, 0);
+      document.getElementById('proyFinalSub').textContent = `Tras ${years} ${years === 1 ? 'año' : 'años'} al ${ratePct.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
+      document.getElementById('proyGanancia').textContent = fmt(ganancia, 0);
+      const multiplicador = invertido > 0 ? (valorFinal / invertido).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—';
+      document.getElementById('proyGananciaSub').textContent = `×${multiplicador} sobre lo invertido`;
+      document.getElementById('proyInvertido').textContent = fmt(invertido, 0);
+      document.getElementById('proyInvertidoSub').textContent = `${fmt(capital, 0)} inicial + ${fmt(mensual * n, 0)} aportes`;
+      document.getElementById('proyInteres').textContent = fmt(interes, 0);
+      const pctInteres = invertido > 0 ? ((interes / invertido) * 100).toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : '—';
+      document.getElementById('proyInteresSub').textContent = `${pctInteres}% del capital`;
+
+      // Gráfico
+      const labels = [];
+      const dataValor = [];
+      const dataInvertido = [];
+      for (let y = 0; y <= years; y++) {
+        const nm = y * 12;
+        const fvCap = capital * Math.pow(1 + r, nm);
+        const fvMen = r === 0 ? mensual * nm : mensual * (Math.pow(1 + r, nm) - 1) / r;
+        const inv = capital + (mensual * nm);
+        labels.push('Año ' + y);
+        dataValor.push(fvCap + fvMen);
+        dataInvertido.push(inv);
+      }
+
+      const styles = getComputedStyle(document.documentElement);
+      const colBlue  = (styles.getPropertyValue('--accent-blue')  || '#3b82f6').trim();
+      const colMuted = (styles.getPropertyValue('--text-muted')   || '#9ca3af').trim();
+      const colText  = (styles.getPropertyValue('--text-secondary')|| '#cbd5e1').trim();
+      const colBorder= (styles.getPropertyValue('--border')       || 'rgba(255,255,255,0.08)').trim();
+
+      const ctx = document.getElementById('proyChartCanvas').getContext('2d');
+      if (proyChart) proyChart.destroy();
+      proyChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Valor con interés compuesto',
+              data: dataValor,
+              borderColor: colBlue,
+              backgroundColor: colBlue + '22',
+              fill: true,
+              tension: 0.25,
+              borderWidth: 2,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+            },
+            {
+              label: 'Capital invertido',
+              data: dataInvertido,
+              borderColor: colMuted,
+              backgroundColor: 'transparent',
+              borderDash: [6, 4],
+              fill: false,
+              tension: 0,
+              borderWidth: 2,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { labels: { color: colText, font: { family: 'Host Grotesk' } } },
+            tooltip: {
+              callbacks: { label: (ctx) => ctx.dataset.label + ': ' + fmt(ctx.parsed.y, 0) }
+            }
+          },
+          scales: {
+            x: { ticks: { color: colMuted }, grid: { color: colBorder } },
+            y: { ticks: { color: colMuted, callback: (v) => fmt(v, 0) }, grid: { color: colBorder } }
+          }
+        }
+      });
+
+      // Hitos
+      const hitos = [1, 3, 5, 10, 15, 20, 25, 30].filter(y => y <= years);
+      document.getElementById('proyMilestones').innerHTML = hitos.map(y => {
+        const nm = y * 12;
+        const fvCap = capital * Math.pow(1 + r, nm);
+        const fvMen = r === 0 ? mensual * nm : mensual * (Math.pow(1 + r, nm) - 1) / r;
+        const v = fvCap + fvMen;
+        return `
+          <div class="proy-milestone">
+            <div class="m-year">Año ${y}</div>
+            <div class="m-value">${fmt(v, 0)}</div>
+          </div>
+        `;
+      }).join('');
+
+      // Desglose anual
+      let breakdownHtml = `
+        <div class="proy-breakdown-row header">
+          <div>Año</div>
+          <div class="b-cell-right">Invertido</div>
+          <div class="b-cell-right">Valor</div>
+          <div class="b-cell-right">Ganancia</div>
+        </div>
+      `;
+      for (let y = 1; y <= years; y++) {
+        const nm = y * 12;
+        const fvCap = capital * Math.pow(1 + r, nm);
+        const fvMen = r === 0 ? mensual * nm : mensual * (Math.pow(1 + r, nm) - 1) / r;
+        const v = fvCap + fvMen;
+        const inv = capital + (mensual * nm);
+        const gan = v - inv;
+        breakdownHtml += `
+          <div class="proy-breakdown-row">
+            <div>Año ${y}</div>
+            <div class="b-cell-right">${fmt(inv, 0)}</div>
+            <div class="b-cell-right" style="color:var(--text-primary); font-weight:600;">${fmt(v, 0)}</div>
+            <div class="b-cell-right" style="color:var(--accent-green);">${fmt(gan, 0)}</div>
+          </div>
+        `;
+      }
+      document.getElementById('proyBreakdown').innerHTML = breakdownHtml;
     }
 
     /* =========================================================
