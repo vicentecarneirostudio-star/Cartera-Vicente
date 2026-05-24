@@ -4247,6 +4247,11 @@
         <!-- HITOS -->
         <div class="proy-milestones" id="proyMilestones"></div>
 
+        <!-- GRAFICO -->
+        <div class="proy-chart-wrap">
+          <canvas id="proyChart"></canvas>
+        </div>
+
         <!-- DESGLOSE -->
         <div style="font-size:13px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px;">Desglose</div>
         <div class="proy-breakdown" id="proyBreakdown"></div>
@@ -4334,6 +4339,91 @@
         <div class="proy-breakdown-row"><div>Valor final</div><div class="b-cell-right" style="color:var(--accent-blue); font-weight:700;">${fmt(valorFinal, 0)}</div></div>
         <div class="proy-breakdown-row"><div>% que son intereses</div><div class="b-cell-right" style="color:var(--accent-amber); font-weight:600;">${pctIntereses}%</div></div>
       `;
+
+      // Grafico
+      renderProyChart(capital, mensual, r, years);
+    }
+
+    let _proyChart = null;
+    function renderProyChart(capital, mensual, r, years) {
+      const canvas = document.getElementById('proyChart');
+      if (!canvas || typeof Chart === 'undefined') return;
+      const labels = [];
+      const dataValor = [];
+      const dataInvertido = [];
+      for (let y = 0; y <= years; y++) {
+        labels.push(y === 0 ? 'Hoy' : `Año ${y}`);
+        const nm = y * 12;
+        const fvCap = capital * Math.pow(1 + r, nm);
+        const fvMen = r === 0 ? mensual * nm : mensual * (Math.pow(1 + r, nm) - 1) / r;
+        dataValor.push(fvCap + fvMen);
+        dataInvertido.push(capital + mensual * nm);
+      }
+      const fmtK = v => (v >= 1000 ? Math.round(v/1000) + 'K €' : Math.round(v) + ' €');
+      const cfg = {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Valor con interés compuesto',
+              data: dataValor,
+              borderColor: '#3b82f6',
+              backgroundColor: 'rgba(59,130,246,0.08)',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.3,
+              pointRadius: 3,
+              pointBackgroundColor: '#3b82f6'
+            },
+            {
+              label: 'Capital invertido (sin rentabilidad)',
+              data: dataInvertido,
+              borderColor: 'rgba(148,163,184,0.7)',
+              borderDash: [6, 6],
+              borderWidth: 1.5,
+              fill: false,
+              tension: 0,
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: { color: '#cbd5e1', boxWidth: 14, font: { size: 12 } }
+            },
+            tooltip: {
+              callbacks: {
+                label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString('es-ES', { maximumFractionDigits: 0 })} €`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#94a3b8', font: { size: 11 } },
+              grid: { color: 'rgba(148,163,184,0.08)' }
+            },
+            y: {
+              ticks: {
+                color: '#94a3b8',
+                font: { size: 11 },
+                callback: v => fmtK(v)
+              },
+              grid: { color: 'rgba(148,163,184,0.08)' }
+            }
+          }
+        }
+      };
+      if (_proyChart) {
+        _proyChart.data = cfg.data;
+        _proyChart.update();
+      } else {
+        _proyChart = new Chart(canvas, cfg);
+      }
     }
 
     /* =========================================================
