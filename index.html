@@ -1426,6 +1426,49 @@
       margin-bottom: 20px;
     }
 
+    /* --- Rentabilidad anual --- */
+    .annual-returns-card {
+      position: relative;
+      margin-bottom: 24px;
+      padding: 22px 24px;
+      border-radius: 16px;
+      border: 1px solid color-mix(in srgb, var(--accent-green) 35%, var(--border));
+      background:
+        radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--accent-green) 22%, transparent) 0%, transparent 55%),
+        radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--accent-blue) 18%, transparent) 0%, transparent 55%),
+        var(--bg-card);
+      box-shadow: 0 6px 24px color-mix(in srgb, var(--accent-green) 10%, transparent);
+      overflow: hidden;
+    }
+    .annual-returns-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .annual-returns-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+    .annual-returns-sub {
+      margin-top: 4px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+    .annual-returns-sub strong {
+      color: var(--accent-green);
+      font-weight: 700;
+    }
+    .annual-returns-table table {
+      background: transparent;
+    }
+    .annual-returns-table th {
+      background: color-mix(in srgb, var(--bg-tertiary) 70%, transparent);
+    }
+
     /* --- Filtros --- */
     .filters-row {
       display: flex;
@@ -2250,6 +2293,30 @@
 
     </div>
 
+    <!-- RENTABILIDAD ANUAL -->
+    <div class="annual-returns-card" style="animation: fadeInUp 0.3s ease both; animation-delay: 80ms;">
+      <div class="annual-returns-header">
+        <div>
+          <div class="annual-returns-title">Rentabilidad anual</div>
+          <div class="annual-returns-sub">Aporte mensual planificado: <strong>170 €</strong> (155 € TR + 15 € BTC IBKR)</div>
+        </div>
+      </div>
+      <div class="table-container annual-returns-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Año</th>
+              <th class="td-right">Aporte total</th>
+              <th class="td-right">Valor cartera</th>
+              <th class="td-right">Rentabilidad año</th>
+              <th class="td-right">Rentabilidad media acumulada</th>
+            </tr>
+          </thead>
+          <tbody id="annualReturnsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- TABLA DE POSICIONES -->
     <div class="table-section card" style="animation: fadeInUp 0.3s ease both; animation-delay: 100ms;">
       <div class="section-header">
@@ -2305,27 +2372,6 @@
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- RENTABILIDAD ANUAL -->
-    <div class="section" style="margin-top:32px;">
-      <div class="section-title-row" style="margin-bottom:14px;">
-        <h2 class="section-title" style="margin:0;">Rentabilidad anual</h2>
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Año</th>
-              <th class="td-right">Aporte total</th>
-              <th class="td-right">Valor cartera</th>
-              <th class="td-right">Rentabilidad año</th>
-              <th class="td-right">Rentabilidad media acumulada</th>
-            </tr>
-          </thead>
-          <tbody id="annualReturnsBody"></tbody>
         </table>
       </div>
     </div>
