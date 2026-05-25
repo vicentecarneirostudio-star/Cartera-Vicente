@@ -2309,6 +2309,27 @@
       </div>
     </div>
 
+    <!-- RENTABILIDAD ANUAL -->
+    <div class="section" style="margin-top:32px;">
+      <div class="section-title-row" style="margin-bottom:14px;">
+        <h2 class="section-title" style="margin:0;">Rentabilidad anual</h2>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Año</th>
+              <th class="td-right">Aporte total</th>
+              <th class="td-right">Valor cartera</th>
+              <th class="td-right">Rentabilidad año</th>
+              <th class="td-right">Rentabilidad media acumulada</th>
+            </tr>
+          </thead>
+          <tbody id="annualReturnsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
   </div><!-- /main-container -->
   </div><!-- /page-cartera -->
 
@@ -3379,6 +3400,59 @@
       `;
 
       document.getElementById('tableBody').innerHTML = totalRow + rows;
+      renderAnnualReturns();
+    }
+
+    /* =========================================================
+       RENTABILIDAD ANUAL (calculada año a año + futuros vacíos)
+       ========================================================= */
+    const ANNUAL_START_YEAR = 2026;
+    const ANNUAL_YEARS_AHEAD = 4; // 2026 + 4 más = hasta 2030
+
+    function renderAnnualReturns() {
+      const body = document.getElementById('annualReturnsBody');
+      if (!body) return;
+      // Año 2026: datos actuales agregados de toda la cartera (incluye pendientes)
+      const totalCost = positions.reduce((s, p) => s + (p.cost || 0), 0);
+      const totalValue = positions.reduce((s, p) => s + (p.value || 0), 0);
+      const totalPnl = totalValue - totalCost;
+      const rent = totalCost > 0 ? (totalPnl / totalCost) * 100 : null;
+
+      const rows = [];
+      // Acumulador para "rentabilidad media acumulada"
+      const rentsSoFar = [];
+      for (let i = 0; i <= ANNUAL_YEARS_AHEAD; i++) {
+        const year = ANNUAL_START_YEAR + i;
+        let aporteCell = '<span class="td-neutral">—</span>';
+        let valorCell = '<span class="td-neutral">—</span>';
+        let rentCell = '<span class="td-neutral">—</span>';
+        let mediaCell = '<span class="td-neutral">—</span>';
+        if (i === 0) {
+          // Año actual: usar datos reales
+          aporteCell = fmt(totalCost);
+          valorCell = fmt(totalValue);
+          if (rent !== null) {
+            const cls = rent >= 0 ? 'td-pnl-pos' : 'td-pnl-neg';
+            const arrow = rent >= 0 ? '↑' : '↓';
+            rentCell = `<span class="${cls}">${arrow} ${Math.abs(rent).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}%</span>`;
+            rentsSoFar.push(rent);
+            const media = rentsSoFar.reduce((s,v)=>s+v,0) / rentsSoFar.length;
+            const mcls = media >= 0 ? 'td-pnl-pos' : 'td-pnl-neg';
+            const marrow = media >= 0 ? '↑' : '↓';
+            mediaCell = `<span class="${mcls}">${marrow} ${Math.abs(media).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}%</span>`;
+          }
+        }
+        rows.push(`
+          <tr>
+            <td><strong>${year}</strong></td>
+            <td class="td-right">${aporteCell}</td>
+            <td class="td-right">${valorCell}</td>
+            <td class="td-right">${rentCell}</td>
+            <td class="td-right">${mediaCell}</td>
+          </tr>
+        `);
+      }
+      body.innerHTML = rows.join('');
     }
 
     /* =========================================================
