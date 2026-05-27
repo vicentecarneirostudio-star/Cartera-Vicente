@@ -1345,6 +1345,7 @@
       color: var(--accent-red);
       margin-bottom: 10px;
     }
+    .broker-pnl.positive { color: var(--accent-green); }
 
     .broker-breakdown {
       display: flex;
@@ -3228,11 +3229,28 @@
       const total    = getTotalValue();
       const byBroker = getByBroker();
 
+      // PnL dinámico por broker (suma de posiciones)
+      function brokerPnl(brokerName) {
+        const posList = positions.filter(p => p.broker === brokerName);
+        const pnlEur  = posList.reduce((s, p) => s + (p.pnl_eur || 0), 0);
+        const cost    = posList.reduce((s, p) => s + (p.cost    || 0), 0);
+        const pnlPct  = cost > 0 ? (pnlEur / cost) * 100 : null;
+        const sign    = pnlEur >= 0 ? '+' : '-';
+        const eurStr  = `${sign}${Math.abs(pnlEur).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})} €`;
+        const pctStr  = pnlPct !== null
+          ? `${pnlPct >= 0 ? '+' : '-'}${Math.abs(pnlPct).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}%`
+          : null;
+        return {
+          text: pctStr ? `${eurStr} · ${pctStr}` : eurStr,
+          positive: pnlEur >= 0
+        };
+      }
+
       const brokers = [
         {
           key: 'tr', name: 'Trade Republic', brokerKey: 'Trade Republic',
           dot: 'var(--color-tr)', bar: 'var(--color-tr)',
-          pnlText: `-272,30 € · -8,49%`,
+          pnlText: brokerPnl('Trade Republic'),
           extra: () => {
             const trPositions = positions.filter(p => p.broker === 'Trade Republic');
             const etfVal   = trPositions.filter(p => p.type === 'ETF').reduce((s,p) => s+p.value, 0);
@@ -3260,7 +3278,7 @@
         {
           key: 'ibkr', name: 'Interactive Brokers', brokerKey: 'IBKR',
           dot: 'var(--color-ibkr)', bar: 'var(--color-ibkr)',
-          pnlText: `-81,13 €`,
+          pnlText: brokerPnl('IBKR'),
           extra: () => {
             const tickers = positions.filter(p => p.broker === 'IBKR').map(p => p.ticker).join(' · ');
             return `<div class="broker-positions">${tickers}</div>`;
@@ -3269,7 +3287,7 @@
         {
           key: 'kraken', name: 'Kraken', brokerKey: 'Kraken',
           dot: 'var(--color-kraken)', bar: 'var(--color-kraken)',
-          pnlText: `-94,83 € · -27,96%`,
+          pnlText: brokerPnl('Kraken'),
           extra: () => `
             <div class="broker-positions">BTC · 0,004151 BTC · Precio medio: 81.715 €/BTC</div>
           `
@@ -3287,7 +3305,7 @@
               <div class="broker-name">${b.name}</div>
               <div class="broker-value">${fmt(val)}</div>
             </div>
-            <div class="broker-pnl">${b.pnlText}</div>
+            <div class="broker-pnl${b.pnlText.positive ? ' positive' : ''}">${b.pnlText.text}</div>
             ${b.extra()}
             <div class="broker-progress-label">
               <span>% de cartera total</span>
