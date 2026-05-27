@@ -1465,6 +1465,35 @@
     .annual-returns-table th {
       background: color-mix(in srgb, var(--bg-tertiary) 70%, transparent);
     }
+    .annual-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-tertiary);
+      padding: 4px;
+      border-radius: 10px;
+    }
+    .annual-tab {
+      padding: 6px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .annual-tab:hover { color: var(--text-primary); }
+    .annual-tab.active {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    }
+    .monthly-chart-wrap {
+      position: relative;
+      height: 280px;
+      width: 100%;
+    }
 
     /* --- Filtros --- */
     .filters-row {
@@ -2294,23 +2323,51 @@
     <div class="annual-returns-card" style="animation: fadeInUp 0.3s ease both; animation-delay: 80ms;">
       <div class="annual-returns-header">
         <div>
-          <div class="annual-returns-title">Rentabilidad anual</div>
+          <div class="annual-returns-title">Rentabilidad</div>
           <div class="annual-returns-sub">Aporte mensual planificado: <strong>170 €</strong> (155 € TR + 15 € BTC IBKR)</div>
         </div>
+        <div class="annual-tabs">
+          <button class="annual-tab active" data-view="anual" onclick="switchReturnsView('anual')">Año</button>
+          <button class="annual-tab" data-view="mensual" onclick="switchReturnsView('mensual')">Mes</button>
+        </div>
       </div>
-      <div class="table-container annual-returns-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Año</th>
-              <th class="td-right">Aporte total</th>
-              <th class="td-right">Valor cartera</th>
-              <th class="td-right">Rentabilidad año</th>
-              <th class="td-right">Rentabilidad media acumulada</th>
-            </tr>
-          </thead>
-          <tbody id="annualReturnsBody"></tbody>
-        </table>
+
+      <!-- VISTA ANUAL -->
+      <div class="returns-view" id="returnsViewAnual">
+        <div class="table-container annual-returns-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Año</th>
+                <th class="td-right">Aporte total</th>
+                <th class="td-right">Valor cartera</th>
+                <th class="td-right">Rentabilidad año</th>
+                <th class="td-right">Rentabilidad media acumulada</th>
+              </tr>
+            </thead>
+            <tbody id="annualReturnsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VISTA MENSUAL -->
+      <div class="returns-view" id="returnsViewMensual" style="display:none;">
+        <div class="monthly-chart-wrap">
+          <canvas id="monthlyChart"></canvas>
+        </div>
+        <div class="table-container annual-returns-table" style="margin-top:18px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Mes</th>
+                <th class="td-right">Aporte</th>
+                <th class="td-right">Valor cartera</th>
+                <th class="td-right">Rentabilidad mes</th>
+              </tr>
+            </thead>
+            <tbody id="monthlyReturnsBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -3512,6 +3569,139 @@
         `);
       }
       body.innerHTML = rows.join('');
+      renderMonthlyReturns();
+    }
+
+    /* =========================================================
+       RENTABILIDAD MENSUAL — tabla + gráfico de líneas
+       ========================================================= */
+    const MONTHLY_START_YEAR  = 2026;
+    const MONTHLY_START_MONTH = 5;       // mayo (mes 5)
+    const MONTHLY_AHEAD       = 18;      // 18 meses por delante incluido el actual
+    const APORTE_MENSUAL      = 170;     // 155 TR + 15 BTC IBKR
+
+    let _monthlyChart = null;
+
+    function switchReturnsView(view) {
+      document.querySelectorAll('.annual-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.view === view);
+      });
+      document.getElementById('returnsViewAnual').style.display    = view === 'anual' ? '' : 'none';
+      document.getElementById('returnsViewMensual').style.display  = view === 'mensual' ? '' : 'none';
+      if (view === 'mensual') renderMonthlyReturns();
+    }
+
+    function renderMonthlyReturns() {
+      const body = document.getElementById('monthlyReturnsBody');
+      if (!body) return;
+      const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+      // Snapshot actual de la cartera
+      const totalCost  = positions.reduce((s,p) => s + (p.cost  || 0), 0);
+      const totalValue = positions.reduce((s,p) => s + (p.value || 0), 0);
+      const rentActual = totalCost > 0 ? ((totalValue - totalCost) / totalCost) * 100 : null;
+
+      const labels = [];
+      const dataValor = [];
+      const dataAporte = [];
+      const rows = [];
+
+      let m = MONTHLY_START_MONTH - 1; // 0-indexado
+      let y = MONTHLY_START_YEAR;
+      for (let i = 0; i < MONTHLY_AHEAD; i++) {
+        const label = `${meses[m]} ${y}`;
+        labels.push(label);
+        let aporteCell = '<span class="td-neutral">—</span>';
+        let valorCell  = '<span class="td-neutral">—</span>';
+        let rentCell   = '<span class="td-neutral">—</span>';
+        if (i === 0) {
+          // mes actual con datos reales
+          aporteCell = fmt(totalCost);
+          valorCell  = fmt(totalValue);
+          dataValor.push(totalValue);
+          dataAporte.push(totalCost);
+          if (rentActual !== null) {
+            const cls = rentActual >= 0 ? 'td-pnl-pos' : 'td-pnl-neg';
+            const arrow = rentActual >= 0 ? '↑' : '↓';
+            rentCell = `<span class="${cls}">${arrow} ${Math.abs(rentActual).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}%</span>`;
+          }
+        } else {
+          dataValor.push(null);
+          dataAporte.push(null);
+        }
+        rows.push(`
+          <tr>
+            <td><strong>${label}</strong></td>
+            <td class="td-right">${aporteCell}</td>
+            <td class="td-right">${valorCell}</td>
+            <td class="td-right">${rentCell}</td>
+          </tr>
+        `);
+        m++;
+        if (m > 11) { m = 0; y++; }
+      }
+      body.innerHTML = rows.join('');
+
+      // Chart
+      const canvas = document.getElementById('monthlyChart');
+      if (!canvas || typeof Chart === 'undefined') return;
+      const cfg = {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Valor cartera',
+              data: dataValor,
+              borderColor: '#3b82f6',
+              backgroundColor: 'rgba(59,130,246,0.10)',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.3,
+              spanGaps: false,
+              pointRadius: 4,
+              pointBackgroundColor: '#3b82f6'
+            },
+            {
+              label: 'Aporte acumulado',
+              data: dataAporte,
+              borderColor: '#f97316',
+              borderDash: [6, 6],
+              borderWidth: 1.5,
+              fill: false,
+              tension: 0,
+              spanGaps: false,
+              pointRadius: 3,
+              pointBackgroundColor: '#f97316'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top', labels: { color: '#cbd5e1', boxWidth: 14, font: { size: 12 } } },
+            tooltip: {
+              callbacks: {
+                label: ctx => ctx.parsed.y == null ? '' : `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString('es-ES',{maximumFractionDigits:0})} €`
+              }
+            }
+          },
+          scales: {
+            x: { ticks: { color: '#94a3b8', font: { size: 10 }, maxRotation: 45, minRotation: 45 }, grid: { color: 'rgba(148,163,184,0.08)' } },
+            y: {
+              ticks: { color: '#94a3b8', font: { size: 11 }, callback: v => (v >= 1000 ? Math.round(v/1000) + 'K €' : Math.round(v) + ' €') },
+              grid: { color: 'rgba(148,163,184,0.08)' }
+            }
+          }
+        }
+      };
+      if (_monthlyChart) {
+        _monthlyChart.data = cfg.data;
+        _monthlyChart.update();
+      } else {
+        _monthlyChart = new Chart(canvas, cfg);
+      }
     }
 
     /* =========================================================
