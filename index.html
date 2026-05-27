@@ -2355,19 +2355,6 @@
         <div class="monthly-chart-wrap">
           <canvas id="monthlyChart"></canvas>
         </div>
-        <div class="table-container annual-returns-table" style="margin-top:18px;">
-          <table>
-            <thead>
-              <tr>
-                <th>Mes</th>
-                <th class="td-right">Aporte</th>
-                <th class="td-right">Valor cartera</th>
-                <th class="td-right">Rentabilidad mes</th>
-              </tr>
-            </thead>
-            <tbody id="monthlyReturnsBody"></tbody>
-          </table>
-        </div>
       </div>
     </div>
 
@@ -3591,90 +3578,59 @@
       if (view === 'mensual') renderMonthlyReturns();
     }
 
+    // Rentabilidades mensuales (%). null = mes futuro sin datos
+    // Empieza en MONTHLY_START_YEAR / MONTHLY_START_MONTH (May 2026)
+    const MONTHLY_RETURNS = [
+      17,   // May 2026
+      19,   // Jun 2026
+      null, // Jul 2026
+      null, // Ago 2026
+      null, // Sep 2026
+      null, // Oct 2026
+      null, // Nov 2026
+      null, // Dic 2026
+      null, // Ene 2027
+      null, // Feb 2027
+      null, // Mar 2027
+      null, // Abr 2027
+      null, // May 2027
+      null, // Jun 2027
+      null, // Jul 2027
+      null, // Ago 2027
+      null, // Sep 2027
+      null, // Oct 2027
+    ];
+
     function renderMonthlyReturns() {
-      const body = document.getElementById('monthlyReturnsBody');
-      if (!body) return;
       const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-
-      // Snapshot actual de la cartera
-      const totalCost  = positions.reduce((s,p) => s + (p.cost  || 0), 0);
-      const totalValue = positions.reduce((s,p) => s + (p.value || 0), 0);
-      const rentActual = totalCost > 0 ? ((totalValue - totalCost) / totalCost) * 100 : null;
-
       const labels = [];
-      const dataValor = [];
-      const dataAporte = [];
-      const rows = [];
-
       let m = MONTHLY_START_MONTH - 1; // 0-indexado
       let y = MONTHLY_START_YEAR;
       for (let i = 0; i < MONTHLY_AHEAD; i++) {
-        const label = `${meses[m]} ${y}`;
-        labels.push(label);
-        let aporteCell = '<span class="td-neutral">—</span>';
-        let valorCell  = '<span class="td-neutral">—</span>';
-        let rentCell   = '<span class="td-neutral">—</span>';
-        if (i === 0) {
-          // mes actual con datos reales
-          aporteCell = fmt(totalCost);
-          valorCell  = fmt(totalValue);
-          dataValor.push(totalValue);
-          dataAporte.push(totalCost);
-          if (rentActual !== null) {
-            const cls = rentActual >= 0 ? 'td-pnl-pos' : 'td-pnl-neg';
-            const arrow = rentActual >= 0 ? '↑' : '↓';
-            rentCell = `<span class="${cls}">${arrow} ${Math.abs(rentActual).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}%</span>`;
-          }
-        } else {
-          dataValor.push(null);
-          dataAporte.push(null);
-        }
-        rows.push(`
-          <tr>
-            <td><strong>${label}</strong></td>
-            <td class="td-right">${aporteCell}</td>
-            <td class="td-right">${valorCell}</td>
-            <td class="td-right">${rentCell}</td>
-          </tr>
-        `);
+        labels.push(`${meses[m]} ${y}`);
         m++;
         if (m > 11) { m = 0; y++; }
       }
-      body.innerHTML = rows.join('');
+      const data = MONTHLY_RETURNS.slice(0, MONTHLY_AHEAD);
 
-      // Chart
       const canvas = document.getElementById('monthlyChart');
       if (!canvas || typeof Chart === 'undefined') return;
       const cfg = {
         type: 'line',
         data: {
           labels,
-          datasets: [
-            {
-              label: 'Valor cartera',
-              data: dataValor,
-              borderColor: '#3b82f6',
-              backgroundColor: 'rgba(59,130,246,0.10)',
-              borderWidth: 2,
-              fill: true,
-              tension: 0.3,
-              spanGaps: false,
-              pointRadius: 4,
-              pointBackgroundColor: '#3b82f6'
-            },
-            {
-              label: 'Aporte acumulado',
-              data: dataAporte,
-              borderColor: '#f97316',
-              borderDash: [6, 6],
-              borderWidth: 1.5,
-              fill: false,
-              tension: 0,
-              spanGaps: false,
-              pointRadius: 3,
-              pointBackgroundColor: '#f97316'
-            }
-          ]
+          datasets: [{
+            label: 'Rentabilidad mensual',
+            data,
+            borderColor: '#22c55e',
+            backgroundColor: 'rgba(34,197,94,0.12)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.3,
+            spanGaps: false,
+            pointRadius: 4,
+            pointBackgroundColor: '#22c55e'
+          }]
         },
         options: {
           responsive: true,
@@ -3683,14 +3639,14 @@
             legend: { position: 'top', labels: { color: '#cbd5e1', boxWidth: 14, font: { size: 12 } } },
             tooltip: {
               callbacks: {
-                label: ctx => ctx.parsed.y == null ? '' : `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString('es-ES',{maximumFractionDigits:0})} €`
+                label: ctx => ctx.parsed.y == null ? '' : `${ctx.parsed.y.toLocaleString('es-ES',{maximumFractionDigits:2})} %`
               }
             }
           },
           scales: {
             x: { ticks: { color: '#94a3b8', font: { size: 10 }, maxRotation: 45, minRotation: 45 }, grid: { color: 'rgba(148,163,184,0.08)' } },
             y: {
-              ticks: { color: '#94a3b8', font: { size: 11 }, callback: v => (v >= 1000 ? Math.round(v/1000) + 'K €' : Math.round(v) + ' €') },
+              ticks: { color: '#94a3b8', font: { size: 11 }, callback: v => v + ' %' },
               grid: { color: 'rgba(148,163,184,0.08)' }
             }
           }
