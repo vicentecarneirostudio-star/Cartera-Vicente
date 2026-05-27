@@ -3632,19 +3632,6 @@
               ctx.fill();
             }
           }
-          // Línea sólida vertical en cada mes
-          if (scales.x) {
-            ctx.strokeStyle = 'rgba(148,163,184,0.40)';
-            ctx.lineWidth = 1;
-            const ticks = scales.x.getTicks();
-            ticks.forEach((_, i) => {
-              const xPx = scales.x.getPixelForTick(i);
-              ctx.beginPath();
-              ctx.moveTo(xPx, chartArea.top);
-              ctx.lineTo(xPx, chartArea.bottom);
-              ctx.stroke();
-            });
-          }
           ctx.restore();
         }
       };
@@ -3657,13 +3644,18 @@
             label: 'Rentabilidad mensual',
             data,
             borderColor: '#22c55e',
-            backgroundColor: 'rgba(34,197,94,0.12)',
+            backgroundColor: 'rgba(34,197,94,0.15)',
             borderWidth: 2,
             fill: true,
             tension: 0,
             spanGaps: false,
             pointRadius: 4,
-            pointBackgroundColor: '#22c55e'
+            pointBackgroundColor: ctx => (ctx.parsed && ctx.parsed.y != null && ctx.parsed.y < 0) ? '#ef4444' : '#22c55e',
+            pointBorderColor:    ctx => (ctx.parsed && ctx.parsed.y != null && ctx.parsed.y < 0) ? '#ef4444' : '#22c55e',
+            segment: {
+              borderColor: ctx => (ctx.p0.parsed.y < 0 || ctx.p1.parsed.y < 0) ? '#ef4444' : '#22c55e',
+              backgroundColor: ctx => (ctx.p0.parsed.y < 0 || ctx.p1.parsed.y < 0) ? 'rgba(239,68,68,0.18)' : 'rgba(34,197,94,0.15)'
+            }
           }]
         },
         options: {
