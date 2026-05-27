@@ -3632,15 +3632,18 @@
               ctx.fill();
             }
           }
-          // Línea sólida vertical en el mes actual (primer punto = May 2026)
+          // Línea sólida vertical en cada mes
           if (scales.x) {
-            const currentX = scales.x.getPixelForTick(0);
-            ctx.strokeStyle = 'rgba(148,163,184,0.55)';
+            ctx.strokeStyle = 'rgba(148,163,184,0.40)';
             ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(currentX, chartArea.top);
-            ctx.lineTo(currentX, chartArea.bottom);
-            ctx.stroke();
+            const ticks = scales.x.getTicks();
+            ticks.forEach((_, i) => {
+              const xPx = scales.x.getPixelForTick(i);
+              ctx.beginPath();
+              ctx.moveTo(xPx, chartArea.top);
+              ctx.lineTo(xPx, chartArea.bottom);
+              ctx.stroke();
+            });
           }
           ctx.restore();
         }
