@@ -3616,33 +3616,76 @@
       const canvas = document.getElementById('monthlyChart');
       if (!canvas || typeof Chart === 'undefined') return;
 
-      // Plugin: rejilla densa de puntitos + línea vertical sólida en el mes actual
+      // Plugin: rejilla de puntitos sutil + línea 0% refinada
       const dotGridPlugin = {
         id: 'dotGrid',
         beforeDatasetsDraw(chart) {
           const { ctx, chartArea, scales } = chart;
           if (!chartArea) return;
-          const spacing = 14;
+          const spacing = 16;
           ctx.save();
-          ctx.fillStyle = 'rgba(148,163,184,0.28)';
+          ctx.fillStyle = 'rgba(148,163,184,0.18)';
           for (let x = chartArea.left; x <= chartArea.right; x += spacing) {
             for (let y = chartArea.top; y <= chartArea.bottom; y += spacing) {
               ctx.beginPath();
-              ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+              ctx.arc(x, y, 1, 0, Math.PI * 2);
               ctx.fill();
             }
           }
-          // Línea horizontal en 0%
+          // Línea horizontal en 0% — discontinua y sutil
           if (scales.y) {
             const zeroY = scales.y.getPixelForValue(0);
-            ctx.strokeStyle = 'rgba(203,213,225,0.55)';
+            ctx.strokeStyle = 'rgba(148,163,184,0.45)';
             ctx.lineWidth = 1;
+            ctx.setLineDash([4, 4]);
             ctx.beginPath();
             ctx.moveTo(chartArea.left, zeroY);
             ctx.lineTo(chartArea.right, zeroY);
             ctx.stroke();
+            ctx.setLineDash([]);
           }
           ctx.restore();
+        }
+      };
+
+      // Plugin: etiquetas de valor encima/debajo de cada barra
+      const valueLabelsPlugin = {
+        id: 'valueLabels',
+        afterDatasetsDraw(chart) {
+          const { ctx, scales } = chart;
+          const meta = chart.getDatasetMeta(0);
+          if (!meta || !meta.data) return;
+          ctx.save();
+          ctx.font = '600 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.textAlign = 'center';
+          meta.data.forEach((bar, i) => {
+            const v = data[i];
+            if (v == null) return;
+            const x = bar.x;
+            const isPos = v >= 0;
+            const y = isPos ? bar.y - 6 : bar.y + 12;
+            ctx.fillStyle = isPos ? '#22c55e' : '#ef4444';
+            ctx.fillText(`${Math.round(v)}%`, x, y);
+          });
+          ctx.restore();
+        }
+      };
+
+      // Gradiente vertical para las barras (verde y rojo)
+      const makeGradient = (chart, positive) => {
+        const { ctx, chartArea, scales } = chart;
+        if (!chartArea) return positive ? 'rgba(34,197,94,0.7)' : 'rgba(239,68,68,0.7)';
+        const zeroY = scales.y ? scales.y.getPixelForValue(0) : chartArea.bottom;
+        if (positive) {
+          const g = ctx.createLinearGradient(0, chartArea.top, 0, zeroY);
+          g.addColorStop(0, 'rgba(34,197,94,0.95)');
+          g.addColorStop(1, 'rgba(34,197,94,0.45)');
+          return g;
+        } else {
+          const g = ctx.createLinearGradient(0, zeroY, 0, chartArea.bottom);
+          g.addColorStop(0, 'rgba(239,68,68,0.45)');
+          g.addColorStop(1, 'rgba(239,68,68,0.95)');
+          return g;
         }
       };
 
@@ -3655,27 +3698,38 @@
             data,
             backgroundColor: ctx => {
               const v = ctx.parsed && ctx.parsed.y;
-              if (v == null) return 'rgba(148,163,184,0.15)';
-              return v < 0 ? 'rgba(239,68,68,0.75)' : 'rgba(34,197,94,0.75)';
+              if (v == null) return 'rgba(148,163,184,0.10)';
+              return makeGradient(ctx.chart, v >= 0);
             },
-            borderColor: ctx => {
+            borderColor: 'transparent',
+            borderWidth: 0,
+            borderRadius: 6,
+            borderSkipped: false,
+            categoryPercentage: 0.9,
+            barPercentage: 0.7,
+            hoverBackgroundColor: ctx => {
               const v = ctx.parsed && ctx.parsed.y;
-              if (v == null) return 'rgba(148,163,184,0.4)';
-              return v < 0 ? '#ef4444' : '#22c55e';
-            },
-            borderWidth: 1,
-            borderRadius: 3,
-            categoryPercentage: 0.85,
-            barPercentage: 0.85
+              if (v == null) return 'rgba(148,163,184,0.20)';
+              return v < 0 ? 'rgba(239,68,68,1)' : 'rgba(34,197,94,1)';
+            }
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           animation: false,
+          layout: { padding: { top: 18, bottom: 4 } },
           plugins: {
             legend: { display: false },
             tooltip: {
+              backgroundColor: 'rgba(15,23,42,0.95)',
+              titleColor: '#f1f5f9',
+              bodyColor: '#f1f5f9',
+              borderColor: 'rgba(148,163,184,0.2)',
+              borderWidth: 1,
+              padding: 10,
+              cornerRadius: 8,
+              displayColors: false,
               callbacks: {
                 title: items => Array.isArray(items[0].label) ? items[0].label.join(' ') : items[0].label,
                 label: ctx => ctx.parsed.y == null ? '' : `${Math.round(ctx.parsed.y)} %`
@@ -3684,18 +3738,20 @@
           },
           scales: {
             x: {
-              ticks: { color: '#94a3b8', font: { size: 10 }, maxRotation: 0, minRotation: 0, autoSkip: false },
-              grid: { display: false, drawBorder: false }
+              ticks: { color: '#94a3b8', font: { size: 10, weight: '500' }, maxRotation: 0, minRotation: 0, autoSkip: false, padding: 6 },
+              grid: { display: false, drawBorder: false },
+              border: { display: false }
             },
             y: {
               min: -20,
               max: 50,
-              ticks: { color: '#94a3b8', font: { size: 11 }, stepSize: 10, callback: v => v + ' %' },
-              grid: { display: false, drawBorder: false }
+              ticks: { color: '#94a3b8', font: { size: 11 }, stepSize: 10, callback: v => v + ' %', padding: 8 },
+              grid: { display: false, drawBorder: false },
+              border: { display: false }
             }
           }
         },
-        plugins: [dotGridPlugin]
+        plugins: [dotGridPlugin, valueLabelsPlugin]
       };
       if (_monthlyChart) {
         _monthlyChart.data = cfg.data;
