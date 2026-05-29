@@ -3667,34 +3667,33 @@
             const isPos = v >= 0;
             // y en el extremo de la barra (arriba si positivo, abajo si negativo)
             const y = bar.y;
-            ctx.fillStyle = isPos ? '#22D3EE' : '#0891B2';
+            ctx.fillStyle = isPos ? '#A7D4E5' : '#5F93A7';
             ctx.fillText(`${Math.round(v)}%`, x, y);
           });
           ctx.restore();
         }
       };
 
-      // Paleta — cyan vivo tirando a blanco
-      const CYAN_BRIGHT = '#22D3EE';   // cyan vivo
-      const CYAN_WHITE  = '#F0FDFF';   // casi blanco
-      const CYAN_DEEP   = '#0891B2';   // cyan profundo para negativos
+      // Paleta — degradado del top al base
+      const TOP_COLOR  = '#A7D4E5';   // top de la barra
+      const BASE_COLOR = '#5F93A7';   // base de la barra
 
-      // Gradiente vertical para las barras internas — cyan → blanco
+      // Gradiente vertical: top → base
       const makeGradient = (chart, positive) => {
         const { ctx, chartArea, scales } = chart;
-        if (!chartArea) return CYAN_BRIGHT;
+        if (!chartArea) return TOP_COLOR;
         const zeroY = scales.y ? scales.y.getPixelForValue(0) : chartArea.bottom;
         if (positive) {
+          // top en parte alta, base en 0%
           const g = ctx.createLinearGradient(0, chartArea.top, 0, zeroY);
-          g.addColorStop(0, CYAN_WHITE);
-          g.addColorStop(0.5, CYAN_BRIGHT);
-          g.addColorStop(1, 'rgba(34,211,238,0.55)');
+          g.addColorStop(0, TOP_COLOR);
+          g.addColorStop(1, BASE_COLOR);
           return g;
         } else {
+          // negativas: top en 0%, base abajo
           const g = ctx.createLinearGradient(0, zeroY, 0, chartArea.bottom);
-          g.addColorStop(0, 'rgba(8,145,178,0.55)');
-          g.addColorStop(0.5, CYAN_DEEP);
-          g.addColorStop(1, CYAN_BRIGHT);
+          g.addColorStop(0, TOP_COLOR);
+          g.addColorStop(1, BASE_COLOR);
           return g;
         }
       };
@@ -3714,7 +3713,7 @@
               borderRadius: 999,
               borderSkipped: false,
               categoryPercentage: 0.9,
-              barPercentage: 0.32,
+              barPercentage: 0.5,
               grouped: false,
               order: 2
             },
@@ -3738,7 +3737,7 @@
               hoverBackgroundColor: ctx => {
                 const v = ctx.parsed && ctx.parsed.y;
                 if (v == null) return 'rgba(148,163,184,0.20)';
-                return v < 0 ? CYAN_DEEP : CYAN_BRIGHT;
+                return TOP_COLOR;
               }
             }
           ]
