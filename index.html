@@ -3698,17 +3698,17 @@
         data: {
           labels,
           datasets: [
-            // Capa exterior: "track" gris con esquinas redondeadas (pill)
+            // Capa exterior: "track" gris de altura completa (de -20 a +50)
             {
               label: 'track',
-              data,
+              data: data.map(v => v == null ? null : [-20, 50]),
               backgroundColor: 'rgba(148,163,184,0.18)',
               borderColor: 'transparent',
               borderWidth: 0,
               borderRadius: 999,
               borderSkipped: false,
               categoryPercentage: 0.9,
-              barPercentage: 0.75,
+              barPercentage: 0.55,
               grouped: false,
               order: 2
             },
@@ -3726,7 +3726,7 @@
               borderRadius: 999,
               borderSkipped: false,
               categoryPercentage: 0.9,
-              barPercentage: 0.38,
+              barPercentage: 0.22,
               grouped: false,
               order: 1,
               hoverBackgroundColor: ctx => {
