@@ -3652,8 +3652,8 @@
       const valueLabelsPlugin = {
         id: 'valueLabels',
         afterDatasetsDraw(chart) {
-          const { ctx, scales } = chart;
-          const meta = chart.getDatasetMeta(0);
+          const { ctx } = chart;
+          const meta = chart.getDatasetMeta(1) || chart.getDatasetMeta(0);
           if (!meta || !meta.data) return;
           ctx.save();
           ctx.font = '600 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
@@ -3671,20 +3671,24 @@
         }
       };
 
-      // Gradiente vertical para las barras (verde y rojo)
+      // Paleta de la web
+      const GREEN = '#34D399';
+      const RED   = '#F87171';
+
+      // Gradiente vertical para las barras internas (verde y rojo de la paleta)
       const makeGradient = (chart, positive) => {
         const { ctx, chartArea, scales } = chart;
-        if (!chartArea) return positive ? 'rgba(34,197,94,0.7)' : 'rgba(239,68,68,0.7)';
+        if (!chartArea) return positive ? GREEN : RED;
         const zeroY = scales.y ? scales.y.getPixelForValue(0) : chartArea.bottom;
         if (positive) {
           const g = ctx.createLinearGradient(0, chartArea.top, 0, zeroY);
-          g.addColorStop(0, 'rgba(34,197,94,0.95)');
-          g.addColorStop(1, 'rgba(34,197,94,0.45)');
+          g.addColorStop(0, GREEN);
+          g.addColorStop(1, 'rgba(52,211,153,0.35)');
           return g;
         } else {
           const g = ctx.createLinearGradient(0, zeroY, 0, chartArea.bottom);
-          g.addColorStop(0, 'rgba(239,68,68,0.45)');
-          g.addColorStop(1, 'rgba(239,68,68,0.95)');
+          g.addColorStop(0, 'rgba(248,113,113,0.35)');
+          g.addColorStop(1, RED);
           return g;
         }
       };
@@ -3693,26 +3697,45 @@
         type: 'bar',
         data: {
           labels,
-          datasets: [{
-            label: 'Rentabilidad mensual',
-            data,
-            backgroundColor: ctx => {
-              const v = ctx.parsed && ctx.parsed.y;
-              if (v == null) return 'rgba(148,163,184,0.10)';
-              return makeGradient(ctx.chart, v >= 0);
+          datasets: [
+            // Capa exterior: "track" gris con esquinas redondeadas (pill)
+            {
+              label: 'track',
+              data,
+              backgroundColor: 'rgba(148,163,184,0.18)',
+              borderColor: 'transparent',
+              borderWidth: 0,
+              borderRadius: 999,
+              borderSkipped: false,
+              categoryPercentage: 0.9,
+              barPercentage: 0.75,
+              grouped: false,
+              order: 2
             },
-            borderColor: 'transparent',
-            borderWidth: 0,
-            borderRadius: 6,
-            borderSkipped: false,
-            categoryPercentage: 0.9,
-            barPercentage: 0.7,
-            hoverBackgroundColor: ctx => {
-              const v = ctx.parsed && ctx.parsed.y;
-              if (v == null) return 'rgba(148,163,184,0.20)';
-              return v < 0 ? 'rgba(239,68,68,1)' : 'rgba(34,197,94,1)';
+            // Capa interior: barra más fina con gradiente verde/rojo
+            {
+              label: 'Rentabilidad mensual',
+              data,
+              backgroundColor: ctx => {
+                const v = ctx.parsed && ctx.parsed.y;
+                if (v == null) return 'rgba(148,163,184,0.10)';
+                return makeGradient(ctx.chart, v >= 0);
+              },
+              borderColor: 'transparent',
+              borderWidth: 0,
+              borderRadius: 999,
+              borderSkipped: false,
+              categoryPercentage: 0.9,
+              barPercentage: 0.38,
+              grouped: false,
+              order: 1,
+              hoverBackgroundColor: ctx => {
+                const v = ctx.parsed && ctx.parsed.y;
+                if (v == null) return 'rgba(148,163,184,0.20)';
+                return v < 0 ? RED : GREEN;
+              }
             }
-          }]
+          ]
         },
         options: {
           responsive: true,
@@ -3730,6 +3753,7 @@
               padding: 10,
               cornerRadius: 8,
               displayColors: false,
+              filter: item => item.datasetIndex === 1,
               callbacks: {
                 title: items => Array.isArray(items[0].label) ? items[0].label.join(' ') : items[0].label,
                 label: ctx => ctx.parsed.y == null ? '' : `${Math.round(ctx.parsed.y)} %`
