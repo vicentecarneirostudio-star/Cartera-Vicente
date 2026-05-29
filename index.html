@@ -3665,7 +3665,7 @@
             const x = bar.x;
             const isPos = v >= 0;
             const y = isPos ? bar.y - 6 : bar.y + 12;
-            ctx.fillStyle = isPos ? '#A7D4E5' : '#E5A7A7';
+            ctx.fillStyle = isPos ? '#A7D4E5' : '#FCA5A5';
             ctx.fillText(`${Math.round(v)}%`, x, y);
           });
           ctx.restore();
@@ -3675,8 +3675,8 @@
       // Paleta — degradado del top al base
       const TOP_COLOR  = '#A7D4E5';   // top barra positiva
       const BASE_COLOR = '#5F93A7';   // base barra positiva
-      const TOP_NEG    = '#E5A7A7';   // top barra negativa
-      const BASE_NEG   = '#A75F5F';   // base barra negativa
+      const TOP_NEG    = '#FCA5A5';   // top barra negativa (rojo vivo claro)
+      const BASE_NEG   = '#DC2626';   // base barra negativa (rojo intenso)
 
       // Gradiente vertical por barra: top de cada barra = TOP_COLOR, base = BASE_COLOR
       const makeGradient = (scriptableCtx) => {
