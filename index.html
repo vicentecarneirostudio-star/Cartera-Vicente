@@ -3657,38 +3657,44 @@
           if (!meta || !meta.data) return;
           ctx.save();
           ctx.font = '600 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-          ctx.textAlign = 'center';
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
           meta.data.forEach((bar, i) => {
             const v = data[i];
             if (v == null) return;
-            const x = bar.x;
+            const barWidth = bar.width || 6;
+            const x = bar.x + barWidth / 2 + 4; // a la derecha de la barra
             const isPos = v >= 0;
-            const y = isPos ? bar.y - 6 : bar.y + 12;
-            ctx.fillStyle = isPos ? '#4F8EF7' : '#1E40AF';
+            // y en el extremo de la barra (arriba si positivo, abajo si negativo)
+            const y = bar.y;
+            ctx.fillStyle = isPos ? '#22D3EE' : '#0891B2';
             ctx.fillText(`${Math.round(v)}%`, x, y);
           });
           ctx.restore();
         }
       };
 
-      // Paleta de la web — tonos azules
-      const BLUE_BRIGHT = '#4F8EF7';
-      const BLUE_DEEP   = '#1E40AF';
+      // Paleta — cyan vivo tirando a blanco
+      const CYAN_BRIGHT = '#22D3EE';   // cyan vivo
+      const CYAN_WHITE  = '#F0FDFF';   // casi blanco
+      const CYAN_DEEP   = '#0891B2';   // cyan profundo para negativos
 
-      // Gradiente vertical para las barras internas — todo en azules
+      // Gradiente vertical para las barras internas — cyan → blanco
       const makeGradient = (chart, positive) => {
         const { ctx, chartArea, scales } = chart;
-        if (!chartArea) return BLUE_BRIGHT;
+        if (!chartArea) return CYAN_BRIGHT;
         const zeroY = scales.y ? scales.y.getPixelForValue(0) : chartArea.bottom;
         if (positive) {
           const g = ctx.createLinearGradient(0, chartArea.top, 0, zeroY);
-          g.addColorStop(0, BLUE_BRIGHT);
-          g.addColorStop(1, 'rgba(79,142,247,0.35)');
+          g.addColorStop(0, CYAN_WHITE);
+          g.addColorStop(0.5, CYAN_BRIGHT);
+          g.addColorStop(1, 'rgba(34,211,238,0.55)');
           return g;
         } else {
           const g = ctx.createLinearGradient(0, zeroY, 0, chartArea.bottom);
-          g.addColorStop(0, 'rgba(30,64,175,0.35)');
-          g.addColorStop(1, BLUE_DEEP);
+          g.addColorStop(0, 'rgba(8,145,178,0.55)');
+          g.addColorStop(0.5, CYAN_DEEP);
+          g.addColorStop(1, CYAN_BRIGHT);
           return g;
         }
       };
@@ -3732,7 +3738,7 @@
               hoverBackgroundColor: ctx => {
                 const v = ctx.parsed && ctx.parsed.y;
                 if (v == null) return 'rgba(148,163,184,0.20)';
-                return v < 0 ? BLUE_DEEP : BLUE_BRIGHT;
+                return v < 0 ? CYAN_DEEP : CYAN_BRIGHT;
               }
             }
           ]
