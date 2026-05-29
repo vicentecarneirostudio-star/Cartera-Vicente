@@ -3664,31 +3664,31 @@
             const x = bar.x;
             const isPos = v >= 0;
             const y = isPos ? bar.y - 6 : bar.y + 12;
-            ctx.fillStyle = isPos ? '#22c55e' : '#ef4444';
+            ctx.fillStyle = isPos ? '#4F8EF7' : '#1E40AF';
             ctx.fillText(`${Math.round(v)}%`, x, y);
           });
           ctx.restore();
         }
       };
 
-      // Paleta de la web
-      const GREEN = '#34D399';
-      const RED   = '#F87171';
+      // Paleta de la web — tonos azules
+      const BLUE_BRIGHT = '#4F8EF7';
+      const BLUE_DEEP   = '#1E40AF';
 
-      // Gradiente vertical para las barras internas (verde y rojo de la paleta)
+      // Gradiente vertical para las barras internas — todo en azules
       const makeGradient = (chart, positive) => {
         const { ctx, chartArea, scales } = chart;
-        if (!chartArea) return positive ? GREEN : RED;
+        if (!chartArea) return BLUE_BRIGHT;
         const zeroY = scales.y ? scales.y.getPixelForValue(0) : chartArea.bottom;
         if (positive) {
           const g = ctx.createLinearGradient(0, chartArea.top, 0, zeroY);
-          g.addColorStop(0, GREEN);
-          g.addColorStop(1, 'rgba(52,211,153,0.35)');
+          g.addColorStop(0, BLUE_BRIGHT);
+          g.addColorStop(1, 'rgba(79,142,247,0.35)');
           return g;
         } else {
           const g = ctx.createLinearGradient(0, zeroY, 0, chartArea.bottom);
-          g.addColorStop(0, 'rgba(248,113,113,0.35)');
-          g.addColorStop(1, RED);
+          g.addColorStop(0, 'rgba(30,64,175,0.35)');
+          g.addColorStop(1, BLUE_DEEP);
           return g;
         }
       };
@@ -3708,7 +3708,7 @@
               borderRadius: 999,
               borderSkipped: false,
               categoryPercentage: 0.9,
-              barPercentage: 0.55,
+              barPercentage: 0.32,
               grouped: false,
               order: 2
             },
@@ -3726,13 +3726,13 @@
               borderRadius: 999,
               borderSkipped: false,
               categoryPercentage: 0.9,
-              barPercentage: 0.22,
+              barPercentage: 0.14,
               grouped: false,
               order: 1,
               hoverBackgroundColor: ctx => {
                 const v = ctx.parsed && ctx.parsed.y;
                 if (v == null) return 'rgba(148,163,184,0.20)';
-                return v < 0 ? RED : GREEN;
+                return v < 0 ? BLUE_DEEP : BLUE_BRIGHT;
               }
             }
           ]
