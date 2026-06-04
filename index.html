@@ -3665,39 +3665,16 @@
             const x = bar.x;
             const isPos = v >= 0;
             const y = isPos ? bar.y - 6 : bar.y + 12;
-            ctx.fillStyle = isPos ? '#34D399' : '#FCA5A5';
+            ctx.fillStyle = isPos ? '#34D399' : '#F87171';
             ctx.fillText(`${Math.round(v)}%`, x, y);
           });
           ctx.restore();
         }
       };
 
-      // Paleta — degradado del top al base
-      const TOP_COLOR  = '#6EE7B7';   // top barra positiva (verde claro)
-      const BASE_COLOR = '#34D399';   // base barra positiva (accent-green)
-      const TOP_NEG    = '#FCA5A5';   // top barra negativa (rojo vivo claro)
-      const BASE_NEG   = '#DC2626';   // base barra negativa (rojo intenso)
-
-      // Gradiente vertical por barra: top de cada barra = TOP_COLOR, base = BASE_COLOR
-      const makeGradient = (scriptableCtx) => {
-        const chart = scriptableCtx.chart;
-        const v = scriptableCtx.parsed && scriptableCtx.parsed.y;
-        const meta = chart.getDatasetMeta(scriptableCtx.datasetIndex);
-        const bar = meta && meta.data && meta.data[scriptableCtx.dataIndex];
-        const isNeg = v != null && v < 0;
-        const topC  = isNeg ? TOP_NEG  : TOP_COLOR;
-        const baseC = isNeg ? BASE_NEG : BASE_COLOR;
-        if (!bar) return topC;
-        const y0 = bar.y;
-        const y1 = bar.base;
-        if (y0 === y1) return topC;
-        const top = Math.min(y0, y1);
-        const bot = Math.max(y0, y1);
-        const g = chart.ctx.createLinearGradient(0, top, 0, bot);
-        g.addColorStop(0, topC);
-        g.addColorStop(1, baseC);
-        return g;
-      };
+      // Paleta — colores planos sin filtro
+      const POS_COLOR = '#34D399';   // barra positiva (accent-green)
+      const NEG_COLOR = '#F87171';   // barra negativa (accent-red)
 
       const cfg = {
         type: 'bar',
@@ -3725,7 +3702,7 @@
               backgroundColor: ctx => {
                 const v = ctx.parsed && ctx.parsed.y;
                 if (v == null) return 'rgba(148,163,184,0.10)';
-                return makeGradient(ctx);
+                return v < 0 ? NEG_COLOR : POS_COLOR;
               },
               borderColor: 'transparent',
               borderWidth: 0,
