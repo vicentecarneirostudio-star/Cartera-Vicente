@@ -4776,20 +4776,20 @@
           ctx.save();
           ctx.font = '600 10px system-ui, -apple-system, sans-serif';
           ctx.textAlign = 'center';
-          // Etiqueta azul (encima del total)
+          // Etiqueta verde (encima del total)
           const metaBlue = chart.getDatasetMeta(0);
           if (metaBlue && !metaBlue.hidden) {
-            ctx.fillStyle = '#93c5fd';
+            ctx.fillStyle = '#6ee7b7';
             ctx.textBaseline = 'bottom';
             metaBlue.data.forEach((bar, i) => {
               const val = chart.data.datasets[0].data[i];
               ctx.fillText(fmtKShort(val), bar.x, bar.y - 4);
             });
           }
-          // Etiqueta naranja (dentro de capital invertido, en la parte alta de la barra)
+          // Etiqueta lila (dentro de capital invertido, en la parte alta de la barra)
           const metaOrange = chart.getDatasetMeta(1);
           if (metaOrange && !metaOrange.hidden) {
-            ctx.fillStyle = '#fdba74';
+            ctx.fillStyle = '#c4b5fd';
             ctx.textBaseline = 'top';
             metaOrange.data.forEach((bar, i) => {
               const val = chart.data.datasets[1].data[i];
@@ -4808,8 +4808,8 @@
               type: 'bar',
               label: 'Valor con interés compuesto',
               data: dataValor,
-              backgroundColor: 'rgba(59,130,246,0.75)',
-              borderColor: '#3b82f6',
+              backgroundColor: 'rgba(52,211,153,0.75)',
+              borderColor: '#34d399',
               borderWidth: 1,
               borderRadius: 4,
               categoryPercentage: 0.9,
@@ -4821,8 +4821,8 @@
               type: 'bar',
               label: 'Capital invertido (sin rentabilidad)',
               data: dataInvertido,
-              backgroundColor: 'rgba(249,115,22,0.75)',
-              borderColor: '#f97316',
+              backgroundColor: 'rgba(167,139,250,0.75)',
+              borderColor: '#a78bfa',
               borderWidth: 1,
               borderRadius: 4,
               categoryPercentage: 0.9,
