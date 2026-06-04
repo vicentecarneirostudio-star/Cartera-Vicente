@@ -3665,7 +3665,7 @@
             const x = bar.x;
             const isPos = v >= 0;
             const y = isPos ? bar.y - 6 : bar.y + 12;
-            ctx.fillStyle = isPos ? '#A7D4E5' : '#FCA5A5';
+            ctx.fillStyle = isPos ? '#A7E5BC' : '#FCA5A5';
             ctx.fillText(`${Math.round(v)}%`, x, y);
           });
           ctx.restore();
@@ -3673,8 +3673,8 @@
       };
 
       // Paleta — degradado del top al base
-      const TOP_COLOR  = '#A7D4E5';   // top barra positiva
-      const BASE_COLOR = '#5F93A7';   // base barra positiva
+      const TOP_COLOR  = '#A7E5BC';   // top barra positiva (verde claro)
+      const BASE_COLOR = '#3FA76A';   // base barra positiva (verde vivo)
       const TOP_NEG    = '#FCA5A5';   // top barra negativa (rojo vivo claro)
       const BASE_NEG   = '#DC2626';   // base barra negativa (rojo intenso)
 
