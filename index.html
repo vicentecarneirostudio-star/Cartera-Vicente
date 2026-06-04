@@ -4786,10 +4786,10 @@
               ctx.fillText(fmtKShort(val), bar.x, bar.y - 4);
             });
           }
-          // Etiqueta lila (dentro de capital invertido, en la parte alta de la barra)
+          // Etiqueta blanca sobre lila (dentro de capital invertido, en la parte alta)
           const metaOrange = chart.getDatasetMeta(1);
           if (metaOrange && !metaOrange.hidden) {
-            ctx.fillStyle = '#c4b5fd';
+            ctx.fillStyle = '#ffffff';
             ctx.textBaseline = 'top';
             metaOrange.data.forEach((bar, i) => {
               const val = chart.data.datasets[1].data[i];
@@ -4808,7 +4808,7 @@
               type: 'bar',
               label: 'Valor con interés compuesto',
               data: dataValor,
-              backgroundColor: 'rgba(59,130,246,0.75)',
+              backgroundColor: 'rgba(59,130,246,0.9)',
               borderColor: '#3b82f6',
               borderWidth: 1,
               borderRadius: 4,
@@ -4821,7 +4821,7 @@
               type: 'bar',
               label: 'Capital invertido (sin rentabilidad)',
               data: dataInvertido,
-              backgroundColor: 'rgba(167,139,250,0.75)',
+              backgroundColor: 'rgba(167,139,250,0.5)',
               borderColor: '#a78bfa',
               borderWidth: 1,
               borderRadius: 4,
