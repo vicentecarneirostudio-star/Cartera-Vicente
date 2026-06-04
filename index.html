@@ -4776,10 +4776,10 @@
           ctx.save();
           ctx.font = '600 10px system-ui, -apple-system, sans-serif';
           ctx.textAlign = 'center';
-          // Etiqueta naranja (encima del total)
+          // Etiqueta azul (encima del total)
           const metaBlue = chart.getDatasetMeta(0);
           if (metaBlue && !metaBlue.hidden) {
-            ctx.fillStyle = '#fdba74';
+            ctx.fillStyle = '#93c5fd';
             ctx.textBaseline = 'bottom';
             metaBlue.data.forEach((bar, i) => {
               const val = chart.data.datasets[0].data[i];
@@ -4808,8 +4808,8 @@
               type: 'bar',
               label: 'Valor con interés compuesto',
               data: dataValor,
-              backgroundColor: 'rgba(249,115,22,0.75)',
-              borderColor: '#f97316',
+              backgroundColor: 'rgba(59,130,246,0.75)',
+              borderColor: '#3b82f6',
               borderWidth: 1,
               borderRadius: 4,
               categoryPercentage: 0.9,
