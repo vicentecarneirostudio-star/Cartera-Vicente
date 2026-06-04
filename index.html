@@ -4750,6 +4750,25 @@
       }
       const fmtK = v => (v >= 1000 ? Math.round(v/1000) + 'K €' : Math.round(v) + ' €');
       const fmtKShort = v => (v >= 1000 ? Math.round(v/1000) + 'K' : Math.round(v));
+      // Plugin: rejilla de puntitos sutil (mismo patrón que rentabilidad mensual)
+      const proyDotGridPlugin = {
+        id: 'proyDotGrid',
+        beforeDatasetsDraw(chart) {
+          const { ctx, chartArea } = chart;
+          if (!chartArea) return;
+          const spacing = 14;
+          ctx.save();
+          ctx.fillStyle = 'rgba(148,163,184,0.28)';
+          for (let x = chartArea.left; x <= chartArea.right; x += spacing) {
+            for (let y = chartArea.top; y <= chartArea.bottom; y += spacing) {
+              ctx.beginPath();
+              ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+          ctx.restore();
+        }
+      };
       const barLabelPlugin = {
         id: 'barLabel',
         afterDatasetsDraw(chart) {
@@ -4831,7 +4850,7 @@
           scales: {
             x: {
               ticks: { color: '#94a3b8', font: { size: 11 } },
-              grid: { color: 'rgba(148,163,184,0.08)' }
+              grid: { display: false, drawBorder: false }
             },
             y: {
               ticks: {
@@ -4839,11 +4858,11 @@
                 font: { size: 11 },
                 callback: v => fmtK(v)
               },
-              grid: { color: 'rgba(148,163,184,0.08)' }
+              grid: { display: false, drawBorder: false }
             }
           }
         },
-        plugins: [barLabelPlugin]
+        plugins: [proyDotGridPlugin, barLabelPlugin]
       };
       if (_proyChart) {
         _proyChart.data = cfg.data;
