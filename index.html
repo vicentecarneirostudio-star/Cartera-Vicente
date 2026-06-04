@@ -4776,10 +4776,10 @@
           ctx.save();
           ctx.font = '600 10px system-ui, -apple-system, sans-serif';
           ctx.textAlign = 'center';
-          // Etiqueta azul (encima del total)
+          // Etiqueta verde (encima del total)
           const metaBlue = chart.getDatasetMeta(0);
           if (metaBlue && !metaBlue.hidden) {
-            ctx.fillStyle = '#93c5fd';
+            ctx.fillStyle = '#41FFA4';
             ctx.textBaseline = 'bottom';
             metaBlue.data.forEach((bar, i) => {
               const val = chart.data.datasets[0].data[i];
@@ -4808,8 +4808,8 @@
               type: 'bar',
               label: 'Valor con interés compuesto',
               data: dataValor,
-              backgroundColor: 'rgba(59,130,246,0.9)',
-              borderColor: '#3b82f6',
+              backgroundColor: 'rgba(65,255,164,0.9)',
+              borderColor: '#41FFA4',
               borderWidth: 1,
               borderRadius: 4,
               categoryPercentage: 0.9,
@@ -4821,8 +4821,8 @@
               type: 'bar',
               label: 'Capital invertido (sin rentabilidad)',
               data: dataInvertido,
-              backgroundColor: 'rgba(23,37,84,0.5)',
-              borderColor: '#1e3a8a',
+              backgroundColor: 'rgba(0,178,93,0.5)',
+              borderColor: '#00B25D',
               borderWidth: 1,
               borderRadius: 4,
               categoryPercentage: 0.9,
