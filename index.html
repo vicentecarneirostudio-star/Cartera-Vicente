@@ -3580,25 +3580,26 @@
 
     // Rentabilidades mensuales (%). null = mes futuro sin datos
     // Empieza en MONTHLY_START_YEAR / MONTHLY_START_MONTH (May 2026)
+    // Cada mes se registra el valor real al cierre.
     const MONTHLY_RETURNS = [
-      17,   // May 2026
-      19,   // Jun 2026
-      8,    // Jul 2026  (simulado)
-      -5,   // Ago 2026  (simulado, negativo)
-      12,   // Sep 2026  (simulado)
-      22,   // Oct 2026  (simulado)
-      -8,   // Nov 2026  (simulado, negativo)
-      15,   // Dic 2026  (simulado)
-      6,    // Ene 2027  (simulado)
-      null, // Feb 2027
-      null, // Mar 2027
-      null, // Abr 2027
-      null, // May 2027
-      null, // Jun 2027
-      null, // Jul 2027
-      null, // Ago 2027
-      null, // Sep 2027
-      null, // Oct 2027
+      19.12, // May 2026
+      null,  // Jun 2026
+      null,  // Jul 2026
+      null,  // Ago 2026
+      null,  // Sep 2026
+      null,  // Oct 2026
+      null,  // Nov 2026
+      null,  // Dic 2026
+      null,  // Ene 2027
+      null,  // Feb 2027
+      null,  // Mar 2027
+      null,  // Abr 2027
+      null,  // May 2027
+      null,  // Jun 2027
+      null,  // Jul 2027
+      null,  // Ago 2027
+      null,  // Sep 2027
+      null,  // Oct 2027
     ];
 
     function renderMonthlyReturns() {
@@ -3666,7 +3667,8 @@
             const isPos = v >= 0;
             const y = isPos ? bar.y - 6 : bar.y + 12;
             ctx.fillStyle = isPos ? '#34D399' : '#F87171';
-            ctx.fillText(`${Math.round(v)}%`, x, y);
+            const txt = v.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            ctx.fillText(`${txt}%`, x, y);
           });
           ctx.restore();
         }
@@ -3739,7 +3741,7 @@
               filter: item => item.datasetIndex === 1,
               callbacks: {
                 title: items => Array.isArray(items[0].label) ? items[0].label.join(' ') : items[0].label,
-                label: ctx => ctx.parsed.y == null ? '' : `${Math.round(ctx.parsed.y)} %`
+                label: ctx => ctx.parsed.y == null ? '' : `${ctx.parsed.y.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})} %`
               }
             }
           },
