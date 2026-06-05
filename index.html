@@ -3016,7 +3016,8 @@
       // TRADE REPUBLIC — Acciones (5 jun 2026: vendida ServiceNow)
       { ticker: 'QBTS',   name: 'D-Wave Quantum',                     type: 'Acción', broker: 'Trade Republic', value: 567.13, cost: 384.99, pnl_eur: 182.14, pnl_pct: 47.38  },
       { ticker: 'CRSP',   name: 'CRISPR Therapeutics',                type: 'Acción', broker: 'Trade Republic', value: 180.62, cost: 180.00, pnl_eur:   0.62, pnl_pct:  0.37  },
-      // (Bitcoin TR vendido el 5 jun 2026)
+      // TRADE REPUBLIC — Crypto (5 jun 2026)
+      { ticker: 'BTC-TR', name: 'Bitcoin (Trade Republic)',           type: 'Crypto', broker: 'Trade Republic', value: 418.53, cost: 616.62, pnl_eur:-198.09, pnl_pct: -32.12 },
       // IBKR — Acciones (5 jun 2026: solo cambia valoración, mismas posiciones)
       { ticker: 'LLY',    name: 'Eli Lilly and Company',              type: 'Acción', broker: 'IBKR',           value: 484.30, cost: 370.34, pnl_eur: 113.96, pnl_pct: 30.77  },
       { ticker: 'CLSK',   name: 'CleanSpark',                         type: 'Acción', broker: 'IBKR',           value: 580.94, cost: 656.08, pnl_eur: -75.14, pnl_pct: -11.45 },
@@ -3036,7 +3037,7 @@
 
     /* P&L por broker calculado desde capturas (en EUR) */
     const PNL_BROKERS = {
-      'Trade Republic': 765.04,  // actualizado 5 jun 2026 (PyG no realizadas)
+      'Trade Republic': 566.95,  // actualizado 5 jun 2026 (incluye BTC-TR -198,09)
       'IBKR':            53.62,  // actualizado 5 jun 2026 (PyG no realizadas)
       'Kraken':         -89.11,  // sin cambios
     };
@@ -3585,7 +3586,7 @@
     // Cada mes se registra el valor real al cierre.
     const MONTHLY_RETURNS = [
       19.12, // May 2026
-      17.88, // Jun 2026 (MTD 5 jun)
+      11.31, // Jun 2026 (MTD 5 jun, recalculado tras añadir BTC-TR)
       null,  // Jul 2026
       null,  // Ago 2026
       null,  // Sep 2026
