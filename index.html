@@ -3513,11 +3513,15 @@
     function renderAnnualReturns() {
       const body = document.getElementById('annualReturnsBody');
       if (!body) return;
-      // Año 2026: datos actuales agregados de toda la cartera (incluye pendientes)
+      // Aportado y valor: datos reales actuales de toda la cartera (TR + IBKR + Kraken)
       const totalCost = positions.reduce((s, p) => s + (p.cost || 0), 0);
       const totalValue = positions.reduce((s, p) => s + (p.value || 0), 0);
-      const totalPnl = totalValue - totalCost;
-      const rent = totalCost > 0 ? (totalPnl / totalCost) * 100 : null;
+      // Rentabilidad 2026: media de los meses registrados en MONTHLY_RETURNS
+      const monthlyRegistered = (typeof MONTHLY_RETURNS !== 'undefined' ? MONTHLY_RETURNS : [])
+        .filter(v => v != null);
+      const rent = monthlyRegistered.length
+        ? monthlyRegistered.reduce((s, v) => s + v, 0) / monthlyRegistered.length
+        : null;
 
       const rows = [];
       // Acumulador para "rentabilidad media acumulada"
@@ -3581,7 +3585,7 @@
     // Cada mes se registra el valor real al cierre.
     const MONTHLY_RETURNS = [
       19.12, // May 2026
-      null,  // Jun 2026
+      17.88, // Jun 2026 (MTD 5 jun)
       null,  // Jul 2026
       null,  // Ago 2026
       null,  // Sep 2026
