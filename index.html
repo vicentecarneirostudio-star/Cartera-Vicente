@@ -3243,7 +3243,7 @@
       // Total y badge resultado
       const totalEl = document.getElementById('barTotalNumber');
       const badgeEl = document.getElementById('barResultBadge');
-      if (totalEl) totalEl.textContent = fmt(total, 0);
+      if (totalEl) totalEl.textContent = fmt(total);
       if (badgeEl) {
         badgeEl.textContent = `${isPosResult ? '↑' : '↓'} ${Math.abs(pnlPct).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}%`;
         badgeEl.className   = `bar-result-badge ${isPosResult ? 'pos' : 'neg'}`;
