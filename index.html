@@ -2273,7 +2273,7 @@
         <button class="currency-btn" id="btnUsd" onclick="setCurrency('USD')">USD $</button>
       </div>
       <button class="btn-theme" id="btnTheme" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
-      <span class="last-update">Actualizado: 5 jun 2026</span>
+      <span class="last-update">Actualizado: 28 jun 2026</span>
     </div>
   </nav>
 
@@ -3003,7 +3003,7 @@
        DATOS INICIALES DE POSICIONES
        ========================================================= */
     /* Versión de datos — al cambiar fuerza reset del localStorage */
-    const DATA_VERSION = '2026-06-05-v1';
+    const DATA_VERSION = '2026-06-28-v1';
 
     const INITIAL_POSITIONS = [
       // TRADE REPUBLIC — ETFs (datos exactos de TR, 5 jun 2026)
@@ -3018,10 +3018,10 @@
       { ticker: 'CRSP',   name: 'CRISPR Therapeutics',                type: 'Acción', broker: 'Trade Republic', value: 180.62, cost: 180.00, pnl_eur:   0.62, pnl_pct:  0.37  },
       // TRADE REPUBLIC — Crypto (5 jun 2026)
       { ticker: 'BTC-TR', name: 'Bitcoin (Trade Republic)',           type: 'Crypto', broker: 'Trade Republic', value: 418.53, cost: 616.62, pnl_eur:-198.09, pnl_pct: -32.12 },
-      // IBKR — Acciones (5 jun 2026: solo cambia valoración, mismas posiciones)
-      { ticker: 'LLY',    name: 'Eli Lilly and Company',              type: 'Acción', broker: 'IBKR',           value: 484.30, cost: 370.34, pnl_eur: 113.96, pnl_pct: 30.77  },
-      { ticker: 'CLSK',   name: 'CleanSpark',                         type: 'Acción', broker: 'IBKR',           value: 580.94, cost: 656.08, pnl_eur: -75.14, pnl_pct: -11.45 },
-      { ticker: 'WLDN',   name: 'Willdan Group',                      type: 'Acción', broker: 'IBKR',           value: 312.29, cost: 297.49, pnl_eur:  14.80, pnl_pct:  4.97  },
+      // IBKR — Acciones (28 jun 2026: datos en vivo IBKR, USD→EUR @0.8783; CLSK vendida, NOW reentra en IBKR)
+      { ticker: 'LLY',    name: 'Eli Lilly and Company',              type: 'Acción', broker: 'IBKR',           value: 519.32, cost: 378.02, pnl_eur: 141.30, pnl_pct: 37.38  },
+      { ticker: 'NOW',    name: 'ServiceNow',                         type: 'Acción', broker: 'IBKR',           value: 643.56, cost: 679.25, pnl_eur: -35.69, pnl_pct: -5.25  },
+      { ticker: 'WLDN',   name: 'Willdan Group',                      type: 'Acción', broker: 'IBKR',           value: 258.44, cost: 303.63, pnl_eur: -45.19, pnl_pct: -14.88 },
       // KRAKEN — Crypto (sin cambios)
       { ticker: 'BTC-K',  name: 'Bitcoin (Kraken)',                   type: 'Crypto', broker: 'Kraken',         value: 250.73, cost: 339.83, pnl_eur: -89.11, pnl_pct: -26.22 },
     ];
@@ -3037,13 +3037,13 @@
 
     /* P&L por broker calculado desde capturas (en EUR) */
     const PNL_BROKERS = {
-      'Trade Republic': 566.95,  // actualizado 5 jun 2026 (incluye BTC-TR -198,09)
-      'IBKR':            53.62,  // actualizado 5 jun 2026 (PyG no realizadas)
+      'Trade Republic': 566.95,  // sin cambios desde 5 jun 2026
+      'IBKR':            61.65,  // actualizado 28 jun 2026 (PyG no realizadas, conector live)
       'Kraken':         -89.11,  // sin cambios
     };
 
-    /* Tipo de cambio EUR → USD (5 jun 2026, rate implícito IBKR) */
-    const EUR_USD = 1.156;
+    /* Tipo de cambio EUR → USD (28 jun 2026, rate implícito IBKR live) */
+    const EUR_USD = 1.1385;
 
     /* =========================================================
        ESTADO DE LA APP
