@@ -3003,21 +3003,21 @@
        DATOS INICIALES DE POSICIONES
        ========================================================= */
     /* Versión de datos — al cambiar fuerza reset del localStorage */
-    const DATA_VERSION = '2026-06-28-v1';
+    const DATA_VERSION = '2026-06-28-v2';
 
     const INITIAL_POSITIONS = [
-      // TRADE REPUBLIC — ETFs (datos exactos de TR, 5 jun 2026)
-      { ticker: 'CNDX',   name: 'NASDAQ 100 USD (Acc)',              type: 'ETF',    broker: 'Trade Republic', value: 939.87, cost: 752.50, pnl_eur: 187.37, pnl_pct: 24.92  },
-      { ticker: 'ISPY',   name: 'Space Innovators USD (Acc)',         type: 'ETF',    broker: 'Trade Republic', value: 820.88, cost: 551.98, pnl_eur: 268.90, pnl_pct: 48.79  },
-      { ticker: 'VDAI',   name: 'AI & Big Data USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 237.72, cost: 170.00, pnl_eur:  67.72, pnl_pct: 39.87  },
-      { ticker: 'SGLN',   name: 'Physical Gold USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 223.03, cost: 197.71, pnl_eur:  25.32, pnl_pct: 12.81  },
-      { ticker: 'AIRO',   name: 'Artificial Intelligence & Robotics', type: 'ETF',    broker: 'Trade Republic', value: 194.57, cost: 160.00, pnl_eur:  34.57, pnl_pct: 21.62  },
-      { ticker: 'CXCN',   name: 'WisdomTree Quantum Computing',       type: 'ETF',    broker: 'Trade Republic', value:  18.40, cost:  20.00, pnl_eur:  -1.60, pnl_pct: -7.98  },
-      // TRADE REPUBLIC — Acciones (5 jun 2026: vendida ServiceNow)
-      { ticker: 'QBTS',   name: 'D-Wave Quantum',                     type: 'Acción', broker: 'Trade Republic', value: 567.13, cost: 384.99, pnl_eur: 182.14, pnl_pct: 47.38  },
-      { ticker: 'CRSP',   name: 'CRISPR Therapeutics',                type: 'Acción', broker: 'Trade Republic', value: 180.62, cost: 180.00, pnl_eur:   0.62, pnl_pct:  0.37  },
-      // TRADE REPUBLIC — Crypto (5 jun 2026)
-      { ticker: 'BTC-TR', name: 'Bitcoin (Trade Republic)',           type: 'Crypto', broker: 'Trade Republic', value: 418.53, cost: 616.62, pnl_eur:-198.09, pnl_pct: -32.12 },
+      // TRADE REPUBLIC — ETFs (28 jun 2026)
+      { ticker: 'CNDX',   name: 'NASDAQ 100 USD (Acc)',              type: 'ETF',    broker: 'Trade Republic', value: 934.77, cost: 752.51, pnl_eur: 182.26, pnl_pct: 24.22  },
+      { ticker: 'ISPY',   name: 'Space Innovators USD (Acc)',         type: 'ETF',    broker: 'Trade Republic', value: 705.61, cost: 599.60, pnl_eur: 106.01, pnl_pct: 17.68  },
+      { ticker: 'VDAI',   name: 'AI & Big Data USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 192.16, cost: 139.00, pnl_eur:  53.16, pnl_pct: 38.27  },
+      { ticker: 'SGLN',   name: 'Physical Gold USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 211.82, cost: 193.41, pnl_eur:  18.41, pnl_pct:  9.52  },
+      { ticker: 'AIRO',   name: 'Artificial Intelligence & Robotics', type: 'ETF',    broker: 'Trade Republic', value: 138.08, cost: 127.07, pnl_eur:  11.01, pnl_pct:  8.67  },
+      { ticker: 'CXCN',   name: 'WisdomTree Quantum Computing',       type: 'ETF',    broker: 'Trade Republic', value:  17.65, cost:  19.99, pnl_eur:  -2.34, pnl_pct:-11.73  },
+      // TRADE REPUBLIC — Acciones (28 jun 2026: vendida CRSP, añadida ASTS)
+      { ticker: 'QBTS',   name: 'D-Wave Quantum',                     type: 'Acción', broker: 'Trade Republic', value: 525.83, cost: 385.00, pnl_eur: 140.83, pnl_pct: 36.58  },
+      { ticker: 'ASTS',   name: 'AST SpaceMobile',                    type: 'Acción', broker: 'Trade Republic', value: 273.72, cost: 300.56, pnl_eur: -26.84, pnl_pct: -8.93  },
+      // TRADE REPUBLIC — Crypto (28 jun 2026)
+      { ticker: 'BTC-TR', name: 'Bitcoin (Trade Republic)',           type: 'Crypto', broker: 'Trade Republic', value: 419.77, cost: 616.67, pnl_eur:-196.90, pnl_pct: -31.93 },
       // IBKR — Acciones (28 jun 2026: datos en vivo IBKR, USD→EUR @0.8783; CLSK vendida, NOW reentra en IBKR)
       { ticker: 'LLY',    name: 'Eli Lilly and Company',              type: 'Acción', broker: 'IBKR',           value: 519.32, cost: 378.02, pnl_eur: 141.30, pnl_pct: 37.38  },
       { ticker: 'NOW',    name: 'ServiceNow',                         type: 'Acción', broker: 'IBKR',           value: 643.56, cost: 679.25, pnl_eur: -35.69, pnl_pct: -5.25  },
@@ -3037,7 +3037,7 @@
 
     /* P&L por broker calculado desde capturas (en EUR) */
     const PNL_BROKERS = {
-      'Trade Republic': 566.95,  // sin cambios desde 5 jun 2026
+      'Trade Republic': 285.60,  // actualizado 28 jun 2026 (suma pnls positions)
       'IBKR':            61.65,  // actualizado 28 jun 2026 (PyG no realizadas, conector live)
       'Kraken':        -130.52,  // actualizado 28 jun 2026
     };
