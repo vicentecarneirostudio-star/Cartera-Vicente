@@ -2341,6 +2341,7 @@
                 <th>Año</th>
                 <th class="td-right">Aporte total</th>
                 <th class="td-right">Valor cartera</th>
+                <th class="td-right">Rentabilidad €</th>
                 <th class="td-right">Rentabilidad año</th>
                 <th class="td-right">Rentabilidad media acumulada</th>
               </tr>
@@ -3531,12 +3532,17 @@
         const year = ANNUAL_START_YEAR + i;
         let aporteCell = '<span class="td-neutral">—</span>';
         let valorCell = '<span class="td-neutral">—</span>';
+        let rentEurCell = '<span class="td-neutral">—</span>';
         let rentCell = '<span class="td-neutral">—</span>';
         let mediaCell = '<span class="td-neutral">—</span>';
         if (i === 0) {
           // Año actual: usar datos reales
           aporteCell = fmt(totalCost);
           valorCell = fmt(totalValue);
+          const pnlEur = totalValue - totalCost;
+          const pcls = pnlEur >= 0 ? 'td-pnl-pos' : 'td-pnl-neg';
+          const parrow = pnlEur >= 0 ? '↑' : '↓';
+          rentEurCell = `<span class="${pcls}">${parrow} ${fmt(Math.abs(pnlEur))}</span>`;
           if (rent !== null) {
             const cls = rent >= 0 ? 'td-pnl-pos' : 'td-pnl-neg';
             const arrow = rent >= 0 ? '↑' : '↓';
@@ -3553,6 +3559,7 @@
             <td><strong>${year}</strong></td>
             <td class="td-right">${aporteCell}</td>
             <td class="td-right">${valorCell}</td>
+            <td class="td-right">${rentEurCell}</td>
             <td class="td-right">${rentCell}</td>
             <td class="td-right">${mediaCell}</td>
           </tr>
