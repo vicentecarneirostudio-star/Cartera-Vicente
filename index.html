@@ -2273,7 +2273,7 @@
         <button class="currency-btn" id="btnUsd" onclick="setCurrency('USD')">USD $</button>
       </div>
       <button class="btn-theme" id="btnTheme" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
-      <span class="last-update">Actualizado: 8 oct 2026</span>
+      <span class="last-update">Actualizado: 9 oct 2026</span>
     </div>
   </nav>
 
@@ -3004,19 +3004,19 @@
        DATOS INICIALES DE POSICIONES
        ========================================================= */
     /* Versión de datos — al cambiar fuerza reset del localStorage */
-    const DATA_VERSION = '2026-10-08-v1';
+    const DATA_VERSION = '2026-10-09-v1';
 
     const INITIAL_POSITIONS = [
-      // TRADE REPUBLIC — ETFs (8 oct 2026: vendida CXCN)
-      { ticker: 'CNDX',   name: 'NASDAQ 100 USD (Acc)',              type: 'ETF',    broker: 'Trade Republic', value: 369.86, cost: 309.20, pnl_eur:  60.66, pnl_pct: 19.62  },
-      { ticker: 'ISPY',   name: 'Space Innovators USD (Acc)',         type: 'ETF',    broker: 'Trade Republic', value: 302.81, cost: 343.64, pnl_eur: -40.83, pnl_pct:-11.88  },
-      { ticker: 'VDAI',   name: 'AI & Big Data USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 242.24, cost: 168.97, pnl_eur:  73.27, pnl_pct: 43.36  },
-      { ticker: 'SGLN',   name: 'Physical Gold USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 212.88, cost: 189.44, pnl_eur:  23.44, pnl_pct: 12.37  },
-      { ticker: 'AIRO',   name: 'Artificial Intelligence & Robotics', type: 'ETF',    broker: 'Trade Republic', value: 180.81, cost: 147.07, pnl_eur:  33.74, pnl_pct: 22.94  },
-      // TRADE REPUBLIC — Acciones (8 oct 2026: vendida ASTS)
-      { ticker: 'QBTS',   name: 'D-Wave Quantum',                     type: 'Acción', broker: 'Trade Republic', value: 257.14, cost: 350.72, pnl_eur: -93.58, pnl_pct:-26.68  },
-      // TRADE REPUBLIC — Crypto (8 oct 2026: 0,001741 BTC; coste estimado con precio medio jun ≈93.463 €/BTC)
-      { ticker: 'BTC-TR', name: 'Bitcoin (Trade Republic)',           type: 'Crypto', broker: 'Trade Republic', value: 125.91, cost: 162.72, pnl_eur: -36.81, pnl_pct: -22.62 },
+      // TRADE REPUBLIC — ETFs (9 oct 2026: tras aportación de 2.000 €)
+      { ticker: 'CNDX',   name: 'NASDAQ 100 USD (Acc)',               type: 'ETF',    broker: 'Trade Republic', value: 869.44, cost: 810.20, pnl_eur:  59.24, pnl_pct:   7.31  },
+      { ticker: 'ISPY',   name: 'Space Innovators USD (Acc)',         type: 'ETF',    broker: 'Trade Republic', value: 706.83, cost: 744.64, pnl_eur: -37.81, pnl_pct:  -5.08  },
+      { ticker: 'VDAI',   name: 'AI & Big Data USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 542.22, cost: 469.97, pnl_eur:  72.25, pnl_pct:  15.37  },
+      { ticker: 'SGLN',   name: 'Physical Gold USD (Acc)',            type: 'ETF',    broker: 'Trade Republic', value: 316.42, cost: 290.44, pnl_eur:  25.98, pnl_pct:   8.94  },
+      { ticker: 'AIRO',   name: 'Artificial Intelligence & Robotics', type: 'ETF',    broker: 'Trade Republic', value: 221.37, cost: 188.08, pnl_eur:  33.29, pnl_pct:  17.70  },
+      // TRADE REPUBLIC — Acciones (9 oct 2026)
+      { ticker: 'QBTS',   name: 'D-Wave Quantum',                     type: 'Acción', broker: 'Trade Republic', value: 463.86, cost: 551.72, pnl_eur: -87.86, pnl_pct: -15.92  },
+      // TRADE REPUBLIC — Crypto (9 oct 2026: 0,00846 BTC · precio medio 71.858,52 €/BTC)
+      { ticker: 'BTC-TR', name: 'Bitcoin (Trade Republic)',           type: 'Crypto', broker: 'Trade Republic', value: 621.54, cost: 607.92, pnl_eur:  13.62, pnl_pct:   2.24  },
       // IBKR — Acciones (8 oct 2026: USD→EUR @0.8936; vendidas LLY, NOW, WLDN; nuevas RGTI, LUNR, WULF)
       { ticker: 'RGTI',   name: 'Rigetti Computing',                  type: 'Acción', broker: 'IBKR',           value: 508.70, cost: 570.45, pnl_eur: -61.75, pnl_pct:-10.82  },
       { ticker: 'LUNR',   name: 'Intuitive Machines',                 type: 'Acción', broker: 'IBKR',           value: 447.00, cost: 509.68, pnl_eur: -62.68, pnl_pct:-12.30  },
@@ -3036,7 +3036,7 @@
 
     /* P&L por broker calculado desde capturas (en EUR) */
     const PNL_BROKERS = {
-      'Trade Republic':  19.89,  // actualizado 8 oct 2026 (suma pnls positions)
+      'Trade Republic':  78.71,  // actualizado 9 oct 2026 (suma pnls positions)
       'IBKR':          -235.79,  // actualizado 8 oct 2026 (PyG no realizadas IBKR)
       'Kraken':         -30.86,  // actualizado 8 oct 2026
     };
@@ -3595,7 +3595,7 @@
       null,  // Jul 2026
       null,  // Ago 2026
       null,  // Sep 2026
-      -7.19, // Oct 2026 (MTD 8 oct, tras ventas y actualización TR + IBKR + Kraken)
+      -3.47, // Oct 2026 (MTD 9 oct, tras aportación 2.000 € en TR)
       null,  // Nov 2026
       null,  // Dic 2026
       null,  // Ene 2027
